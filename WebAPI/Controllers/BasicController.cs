@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Models;
 using DataAccess.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
@@ -18,64 +19,74 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [EnableQuery]
-        public IActionResult List()
+        [Authorize]
+        public virtual IActionResult List()
         {
+            BaseResponse<List<D>> response = new BaseResponse<List<D>>();
             List<D> products = _repository.GetAll();
             if (products == null)
             {
-                return NotFound();
+                return NotFound(response.errWithData(products).ToJson());
             }
 
-            return Ok(products);
+            return Ok(response.successWithData(products).ToJson());
         }
         [HttpGet("{id}")]
-        public IActionResult Detail(int id)
+        [Authorize]
+        public virtual IActionResult Detail(int id)
         {
+            BaseResponse<D> response = new BaseResponse<D>();
             D dto = _repository.Get(id);
             if (dto == null)
             {
-                return NotFound();
+                return NotFound(response.errWithData(dto).ToJson());
             }
 
-            return Ok(dto);
+            return Ok(response.successWithData(dto).ToJson());
         }
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [Authorize]
+        public virtual IActionResult Delete(int id)
         {
+            BaseResponse<D> response = new BaseResponse<D>();
             D dto = _repository.Get(id);
             if (dto == null)
             {
-                return NotFound();
+                return NotFound(response.errWithData(dto).ToJson());
             }
             _repository.Delete(id);
-            return Ok();
+            return Ok(response.successWithData(dto).ToJson());
         }
         [HttpPost]
-        public IActionResult Add(D dto)
+        [Authorize]
+        public virtual IActionResult Add(D dto)
         {
+            BaseResponse<D> response = new BaseResponse<D>();
             try
             {
                 D p = _repository.Add(dto);
-                return Ok(p);
+                return Ok(response.successWithData(p).ToJson());
             }
             catch (DbUpdateConcurrencyException)
             {
-                return NotFound();
+                return NotFound(response.errWithData(null).ToJson());
             }
         }
         [HttpPost]
-        public IActionResult Update(D dto)
+        [Authorize]
+        public virtual IActionResult Update(D dto)
         {
+            BaseResponse<D> response = new BaseResponse<D>();
             if (dto == null)
             {
-                return BadRequest();
+                return BadRequest(response.errWithData(null).ToJson());
             }
             D p = _repository.Update(dto);
             if (p == null)
             {
-                return NotFound();
+                return NotFound(response.errWithData(null).ToJson());
             }
-            return Ok(p);
+            return Ok(response.successWithData(p).ToJson());
         }
     }
 }

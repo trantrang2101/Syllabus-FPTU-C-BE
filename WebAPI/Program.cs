@@ -1,11 +1,13 @@
 
-using AutoMapper;
 using DataAccess;
+using DataAccess.Repositories.Interface;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -21,7 +23,7 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-builder.Services.AddControllers().AddOData(option => option.Expand().Filter().Select().SetMaxTop(null).OrderBy());
+builder.Services.AddControllers().AddNewtonsoftJson().AddOData(option => option.Expand().Filter().Select().SetMaxTop(null).OrderBy());
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(option =>
     {
@@ -37,9 +39,37 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 //Dependency Injection
-builder.Services.AddAutoMapper(typeof(Mapper));
+builder.Services.AddAutoMapper(typeof(DataAccess.Ultis.Mapper));
+builder.Services.AddScoped<IAccountReponsitory, AccountReponsitory>();
+builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 builder.Services.AddHttpClient();
 
 
