@@ -6,7 +6,6 @@ namespace DataAccess.Models
     {
         public RoleDTO()
         {
-            AccountRoles = new HashSet<AccountRoleDTO>();
             RoleSidebars = new HashSet<SidebarDTO>();
         }
 
@@ -14,7 +13,6 @@ namespace DataAccess.Models
         public string? Description { get; set; }
         public string? Name { get; set; }
 
-        public virtual ICollection<AccountRoleDTO> AccountRoles { get; set; }
         public virtual ICollection<SidebarDTO> RoleSidebars { get; set; }
     }
 }

@@ -75,8 +75,6 @@ namespace DataAccess
                     .IsUnicode(false)
                     .HasColumnName("password");
 
-                entity.Property(e => e.Role).HasColumnName("role");
-
                 entity.Property(e => e.Status)
                     .HasColumnName("status")
                     .HasDefaultValueSql("((1))");

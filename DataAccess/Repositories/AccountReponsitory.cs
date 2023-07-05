@@ -3,11 +3,6 @@ using BusinessObject.Models;
 using DataAccess.Models;
 using DataAccess.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -24,12 +19,13 @@ namespace DataAccess.Repositories
         {
             if (string.IsNullOrEmpty(gmail))
             {
-                throw new Exception("Not fill Email");
+                throw new Exception("Trường Email là trường bắt buộc");
             }
-            Account acc = table.FirstOrDefault(x => x.Email.ToLower() == gmail.ToLower());
+            Account acc = table.Where(x => x.Email.ToLower() == gmail.ToLower())
+                .Include(x => x.AccountRoles).ThenInclude(x=>x.Role).FirstOrDefault();
             if (acc == null)
             {
-                throw new Exception("Not Found Account");
+                throw new Exception("Không tìm thấy tài khoản");
             }
             AccountDTO account = _mapper.Map<AccountDTO>(acc);
             string token = _authenticationRepository.GetJwtToken(account);
@@ -38,7 +34,7 @@ namespace DataAccess.Repositories
 
         public override List<AccountDTO> GetAll()
         {
-            List<Account> products = _context.Accounts.Include(x=>x.AccountRoles).ToList();
+            List<Account> products = _context.Accounts.Include(x=>x.AccountRoles).ThenInclude(x=>x.Role).ToList();
             List<AccountDTO> dto = new List<AccountDTO>() { };
             if (products != null && products.Count() > 0)
             {

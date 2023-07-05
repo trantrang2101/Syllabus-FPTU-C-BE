@@ -21,9 +21,9 @@ namespace WebAPI.Controllers
             {
                 return Ok(new BaseResponse<string>().successWithData(_repository.Login(email)).ToJson());
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return Ok(new BaseResponse<string>().errWithData(null).ToJson());
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
             }
         }
     }

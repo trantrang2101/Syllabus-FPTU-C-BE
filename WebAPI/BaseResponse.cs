@@ -25,9 +25,9 @@ namespace WebAPI
             this.message = message;
         }
 
-        public string ToJson()
+        public BaseResponse<T> ToJson()
         {
-            return JsonConvert.SerializeObject(new BaseResponse<T>(this.code,this.message,this.data));
+            return this;
         }
 
         public static BaseResponse<T> successWithMessage(string message)
@@ -42,6 +42,7 @@ namespace WebAPI
 
         public static BaseResponse<T> withMessageAndCode(string message, string code)
         {
+
             return new BaseResponse<T>(code, message);
         }
 

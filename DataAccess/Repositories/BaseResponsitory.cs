@@ -36,7 +36,7 @@ namespace DataAccess.Repositories
             B basic = table.FirstOrDefault(x => x.Id == id);
             if (basic == null || basic.Status == 0)
             {
-                return false;
+                throw new Exception("Cannot Found " + nameof(B));
             }
             basic.Status = 0;
             table.Update(basic);
@@ -51,12 +51,7 @@ namespace DataAccess.Repositories
         public virtual List<D> GetAll()
         {
             List<B> products = table.ToList();
-            List<D> dto = new List<D>() { };
-            if (products != null && products.Count() > 0)
-            {
-                return _mapper.Map<List<D>>(products);
-            }
-            return dto;
+            return _mapper.Map<List<D>>(products);
         }
 
         public virtual D Update(D dto)
@@ -64,6 +59,7 @@ namespace DataAccess.Repositories
             B basic = _mapper.Map<B>(dto);
             table.Attach(basic);
             _context.Entry(basic).State = EntityState.Modified;
+            _context.SaveChanges();
             return dto;
         }
     }
