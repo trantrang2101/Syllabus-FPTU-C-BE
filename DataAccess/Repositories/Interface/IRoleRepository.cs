@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Interface
 {
-    public interface IAccountReponsitory : IBaseRepository<Account,AccountDTO>
+    public interface IRoleRepository : IBaseRepository<Role, RoleDTO>
     {
-        string Login(string username);
     }
 }

@@ -40,7 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 //Dependency Injection
 builder.Services.AddAutoMapper(typeof(DataAccess.Ultis.Mapper));
-builder.Services.AddScoped<IAccountReponsitory, AccountReponsitory>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>

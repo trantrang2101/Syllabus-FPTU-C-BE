@@ -9,8 +9,8 @@ namespace WebAPI.Controllers
 {
     public class AccountController : BasicController<Account,AccountDTO>
     {
-        private IAccountReponsitory _repository;
-        public AccountController(IAccountReponsitory repository) : base(repository)
+        private IAccountRepository _repository;
+        public AccountController(IAccountRepository repository) : base(repository)
         {
             _repository = repository;
         }
