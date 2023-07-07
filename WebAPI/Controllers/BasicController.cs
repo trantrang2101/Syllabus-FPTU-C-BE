@@ -22,71 +22,81 @@ namespace WebAPI.Controllers
         [Authorize]
         public virtual IActionResult List()
         {
-            BaseResponse<List<D>> response = new BaseResponse<List<D>>();
-            List<D> products = _repository.GetAll();
-            if (products == null)
+            try
             {
-                return NotFound(response.errWithData(products).ToJson());
-            }
+                List<D> products = _repository.GetAll();
+                if (products == null)
+                {
+                    throw new Exception("Không tìm thấy danh sách thích hợp");
+                }
 
-            return Ok(response.successWithData(products).ToJson());
+                return Ok(new BaseResponse<List<D>>().successWithData(products).ToJson());
+            }
+            catch(Exception ex)
+            {
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
+            }
         }
         [HttpGet("{id}")]
         [Authorize]
         public virtual IActionResult Detail(int id)
         {
-            BaseResponse<D> response = new BaseResponse<D>();
-            D dto = _repository.Get(id);
-            if (dto == null)
+            try
             {
-                return NotFound(response.errWithData(dto).ToJson());
+                D dto = _repository.Get(id);
+                if (dto == null)
+                {
+                    throw new Exception("Không tìm thấy hoặc đã bị xóa");
+                }
+                return Ok(new BaseResponse<D>().successWithData(dto).ToJson());
             }
-
-            return Ok(response.successWithData(dto).ToJson());
+            catch (Exception ex)
+            {
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
+            }
         }
         [HttpDelete("{id}")]
         [Authorize]
         public virtual IActionResult Delete(int id)
         {
-            BaseResponse<D> response = new BaseResponse<D>();
-            D dto = _repository.Get(id);
-            if (dto == null)
+            try
             {
-                return NotFound(response.errWithData(dto).ToJson());
+                D dto = _repository.Get(id);
+                _repository.Delete(id);
+                return Ok(new BaseResponse<D>().successWithData(dto).ToJson());
             }
-            _repository.Delete(id);
-            return Ok(response.successWithData(dto).ToJson());
+            catch (Exception ex)
+            {
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
+            }
         }
         [HttpPost]
         [Authorize]
         public virtual IActionResult Add(D dto)
         {
-            BaseResponse<D> response = new BaseResponse<D>();
             try
             {
                 D p = _repository.Add(dto);
-                return Ok(response.successWithData(p).ToJson());
+                return Ok(new BaseResponse<D>().successWithData(p).ToJson());
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return NotFound(response.errWithData(null).ToJson());
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
             }
         }
         [HttpPost]
         [Authorize]
         public virtual IActionResult Update(D dto)
         {
-            BaseResponse<D> response = new BaseResponse<D>();
-            if (dto == null)
+            try
             {
-                return BadRequest(response.errWithData(null).ToJson());
+                D p = _repository.Update(dto);
+                return Ok(new BaseResponse<D>().successWithData(p).ToJson());
             }
-            D p = _repository.Update(dto);
-            if (p == null)
+            catch (Exception ex)
             {
-                return NotFound(response.errWithData(null).ToJson());
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
             }
-            return Ok(response.successWithData(p).ToJson());
         }
     }
 }

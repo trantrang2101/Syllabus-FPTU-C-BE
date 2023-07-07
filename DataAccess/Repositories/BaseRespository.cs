@@ -36,7 +36,7 @@ namespace DataAccess.Repositories
             B basic = table.FirstOrDefault(x => x.Id == id);
             if (basic == null || basic.Status == 0)
             {
-                throw new Exception("Cannot Found " + nameof(B));
+                throw new Exception("Không tìm thấy hoặc đã bị xóa");
             }
             basic.Status = 0;
             table.Update(basic);
@@ -56,7 +56,16 @@ namespace DataAccess.Repositories
 
         public virtual D Update(D dto)
         {
-            B basic = _mapper.Map<B>(dto);
+            if(dto == null)
+            {
+                throw new Exception("Chưa truyền giá trị vào");
+            }
+            B basic = table.FirstOrDefault(x => x.Id == dto.Id);
+            if (basic == null || basic.Status == 0)
+            {
+                throw new Exception("Không tìm thấy hoặc đã bị xóa");
+            }
+            basic = _mapper.Map<B>(dto);
             table.Attach(basic);
             _context.Entry(basic).State = EntityState.Modified;
             _context.SaveChanges();
