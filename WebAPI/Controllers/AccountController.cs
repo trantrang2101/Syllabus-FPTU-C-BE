@@ -27,18 +27,5 @@ namespace WebAPI.Controllers
                 return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
             }
         }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            try
-            {
-                return Ok(new BaseResponse<string>().successWithData(_repository.GetAll().ToString()).ToJson());
-            }
-            catch (Exception ex)
-            {
-                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
-            }
-        }
     }
 }
