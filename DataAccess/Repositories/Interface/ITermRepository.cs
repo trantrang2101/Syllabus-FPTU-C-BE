@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessObject.Models;
+using DataAccess.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Interface
 {
-    internal interface ITermDTO
+    public interface ITermRepository : IBaseRepository<Term, TermDTO>
     {
     }
 }

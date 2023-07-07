@@ -1,5 +1,5 @@
 ﻿using BusinessObject.Models;
-using DataAccess.DTO;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Interface
 {
-    public interface IGradeGeneralRepository : IBaseRepository<GradeGeneral, GradeGeneralDTO>
+    public interface ISidebarRepository : IBaseRepository<Sidebar, SidebarDTO>
     {
     }
 }

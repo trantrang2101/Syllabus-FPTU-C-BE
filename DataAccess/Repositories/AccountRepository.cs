@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
-    public class AccountRepository : BaseResponsitory<Account, AccountDTO>, IAccountRepository
+    public class AccountRepository : BaseRespository<Account, AccountDTO>, IAccountRepository
     {
         private static IAuthenticationRepository _authenticationRepository;
 

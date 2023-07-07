@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class AssessmentRepository : BaseResponsitory<Assessment, AssessmentDTO>, IAssessmentRepository
+    public class AssessmentRepository : BaseRespository<Assessment, AssessmentDTO>, IAssessmentRepository
     {
         private static IAssessmentRepository _assessmentRepository;
         public AssessmentRepository(IMapper mapper, DatabaseContext context, IAssessmentRepository assessmentRepository) : base(mapper, context)

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class AccountRoleRepository : BaseResponsitory<AccountRole, AccountRoleDTO>, IAccountRoleRepository
+    public class AccountRoleRepository : BaseRespository<AccountRole, AccountRoleDTO>, IAccountRoleRepository
     {
         private static IAccountRoleRepository _accountRoleRepository;
 

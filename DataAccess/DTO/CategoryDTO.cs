@@ -9,13 +9,8 @@ namespace DataAccess.DTO
 {
     public partial class CategoryDTO: BasicModel
     {
-        public CategoryDTO()
-        {
-            Assessments = new HashSet<AssessmentDTO>();
-        }
-
         public string? Name { get; set; }
 
-        public virtual ICollection<AssessmentDTO> Assessments { get; set; }
+        public virtual ICollection<AssessmentDTO> Assessments { get; set; } = new HashSet<AssessmentDTO>();
     }
 }

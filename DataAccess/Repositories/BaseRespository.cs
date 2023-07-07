@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
-    public class BaseResponsitory<B, D> : IBaseRepository<B, D> where B : BasicModel where D : BasicModel
+    public class BaseRespository<B, D> : IBaseRepository<B, D> where B : BasicModel where D : BasicModel
     { 
         protected DatabaseContext _context = null;
         protected IMapper _mapper;
         protected DbSet<B> table = null;
 
-        public BaseResponsitory(IMapper mapper, DatabaseContext context)
+        public BaseRespository(IMapper mapper, DatabaseContext context)
         {
             _context = context;
             _mapper = mapper;

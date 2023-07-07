@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Interface
 {
-    public partial interface IStudentCourseRepository : IBaseRepository<StudentCourse, StudentCourseDTO>
+    public interface IStudentCourseRepository : IBaseRepository<StudentCourse, StudentCourseDTO>
     {
     }
 }

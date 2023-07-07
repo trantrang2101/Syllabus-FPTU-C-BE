@@ -9,18 +9,11 @@ namespace DataAccess.DTO
 {
     public partial class CurriculumDetailDTO : BasicModel
     {
-        public CurriculumDetailDTO()
-        {
-            GradeGenerals = new HashSet<GradeGeneralDTO>();
-        }
-
         public int Semester { get; set; }
-        public long? CurriculumId { get; set; }
-        public long? SubjectId { get; set; }
         public int MinMark { get; set; }
 
         public virtual CurriculumDTO? Curriculum { get; set; }
         public virtual SubjectDTO? Subject { get; set; }
-        public virtual ICollection<GradeGeneralDTO> GradeGenerals { get; set; }
+        public virtual ICollection<GradeGeneralDTO> GradeGenerals { get; set; } = new HashSet<GradeGeneralDTO>();
     }
 }
