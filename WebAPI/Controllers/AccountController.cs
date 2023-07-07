@@ -15,11 +15,25 @@ namespace WebAPI.Controllers
             _repository = repository;
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login(string email)
         {
             try
             {
                 return Ok(new BaseResponse<string>().successWithData(_repository.Login(email)).ToJson());
+            }
+            catch (Exception ex)
+            {
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                return Ok(new BaseResponse<string>().successWithData(_repository.GetAll().ToString()).ToJson());
             }
             catch (Exception ex)
             {

@@ -43,35 +43,5 @@ namespace DataAccess.Repositories
             return dto;
         }
 
-        public override AccountDTO Get(long id)
-        {
-            var account = _context.Accounts.FirstOrDefault(x => x.Id == id);
-            var dto = new AccountDTO();
-            if (account != null)
-            {
-                return _mapper.Map<AccountDTO>(account);
-            }
-            return dto;
-        }
-
-        public override AccountDTO Update(AccountDTO dto)
-        {
-            var account = _mapper.Map<AccountDTO>(dto);
-            var entityChanged = _context.Update(account).Entity;
-            _context.SaveChanges();
-            return entityChanged;
-        }
-
-        public override bool Delete(long id)
-        {
-            var account = _context.Accounts.FirstOrDefault(x => x.Id == id);
-            if (account != null)
-            {
-                _context.Accounts.Remove(account);
-                var indexChanged = _context.SaveChanges();
-                return (indexChanged > 0);
-            }
-            return false;
-        }
     }
 }
