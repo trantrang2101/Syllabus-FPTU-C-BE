@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Interface
 {
-    public interface IAccessmentRepository: IBaseRepository<Assessment, AssessmentDTO>
+    public interface IAssessmentRepository : IBaseRepository<Assessment, AssessmentDTO>
     {
     }
 }
