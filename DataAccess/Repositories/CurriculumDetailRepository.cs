@@ -12,10 +12,8 @@ namespace DataAccess.Repositories
 {
     public class CurriculumDetailRepository : BaseRespository<CurriculumDetail, CurriculumDetailDTO>, ICurriculumDetailRepository
     {
-        private static ICurriculumDetailRepository _curriculumDetailRepository;
-        public CurriculumDetailRepository(IMapper mapper, DatabaseContext context, ICurriculumDetailRepository curriculumDetailRepository) : base(mapper, context)
+        public CurriculumDetailRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _curriculumDetailRepository = curriculumDetailRepository;
         }
     }
 }

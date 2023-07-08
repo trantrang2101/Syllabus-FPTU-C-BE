@@ -12,10 +12,8 @@ namespace DataAccess.Repositories
 {
     public class CourseRepository : BaseRespository<Course, CourseDTO>, ICourseRepository
     {
-        private static ICourseRepository _courseRepository;
-        public CourseRepository(IMapper mapper, DatabaseContext context, ICourseRepository courseRepository) : base(mapper, context)
+        public CourseRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _courseRepository = courseRepository;
         }
     }
 }

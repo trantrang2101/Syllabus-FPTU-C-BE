@@ -12,11 +12,8 @@ namespace DataAccess.Repositories
 {
     public class GradeDetailRepository : BaseRespository<GradeDetail, GradeDetailDTO>, IGradeDetailRepository
     {
-        private static IGradeDetailRepository _gradeDetailRepository;
-
-        public GradeDetailRepository(IMapper mapper, DatabaseContext context, IGradeDetailRepository gradeDetailRepository) : base(mapper, context)
+        public GradeDetailRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _gradeDetailRepository = gradeDetailRepository;
         }
     }
 }

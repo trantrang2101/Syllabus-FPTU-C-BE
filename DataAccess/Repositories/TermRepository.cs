@@ -12,11 +12,8 @@ namespace DataAccess.Repositories
 {
     public class TermRepository : BaseRespository<Term, TermDTO>, ITermRepository
     {
-        private static ITermRepository _termRepository;
-
-        public TermRepository(IMapper mapper, DatabaseContext context, ITermRepository termRepository) : base(mapper, context)
+        public TermRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _termRepository = termRepository;
         }
     }
 }

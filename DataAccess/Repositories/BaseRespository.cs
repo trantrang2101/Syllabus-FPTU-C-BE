@@ -45,7 +45,12 @@ namespace DataAccess.Repositories
 
         public virtual D Get(long id)
         {
-            return _mapper.Map<D>(table.FirstOrDefault(x => x.Id == id));
+            B basic = table.FirstOrDefault(x => x.Id == id);
+            if (basic == null || basic.Status == 0)
+            {
+                throw new Exception("Không tìm thấy hoặc đã bị xóa");
+            }
+            return _mapper.Map<D>(basic);
         }
 
         public virtual List<D> GetAll()

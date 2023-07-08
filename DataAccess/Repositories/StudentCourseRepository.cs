@@ -12,11 +12,8 @@ namespace DataAccess.Repositories
 {
     public class StudentCourseRepository : BaseRespository<StudentCourse, StudentCourseDTO>, IStudentCourseRepository
     {
-        private static IStudentCourseRepository _studentCourseRepository;
-
-        public StudentCourseRepository(IMapper mapper, DatabaseContext context, IStudentCourseRepository studentCourseRepository) : base(mapper, context)
+        public StudentCourseRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _studentCourseRepository = studentCourseRepository;
         }
     }
 }

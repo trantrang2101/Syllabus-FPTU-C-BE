@@ -12,11 +12,8 @@ namespace DataAccess.Repositories
 {
     public class SubjectRepository : BaseRespository<Subject, SubjectDTO>, ISubjectRepository
     {
-        private static ISubjectRepository _subjectRepository;
-
-        public SubjectRepository(IMapper mapper, DatabaseContext context, ISubjectRepository subjectRepository) : base(mapper, context)
+        public SubjectRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _subjectRepository = subjectRepository;
         }
     }
 }

@@ -8,6 +8,6 @@ namespace DataAccess.Models
         public string? Description { get; set; }
         public string? Name { get; set; }
 
-        public virtual ICollection<SidebarDTO> RoleSidebars { get; set; } = new HashSet<SidebarDTO>();
+        public virtual ICollection<SidebarDTO> Sidebars { get; set; } = new HashSet<SidebarDTO>();
     }
 }

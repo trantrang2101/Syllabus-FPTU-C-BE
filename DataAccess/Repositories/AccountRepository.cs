@@ -22,7 +22,7 @@ namespace DataAccess.Repositories
                 throw new Exception("Trường Email là trường bắt buộc");
             }
             Account? acc = table.Where(x => x.Email.ToLower() == gmail.ToLower())
-                .Include(x => x.AccountRoles).ThenInclude(x => x.Role).FirstOrDefault();
+                .Include("AccountRoles.Role").FirstOrDefault();
             if (acc == null)
             {
                 throw new Exception("Không tìm thấy tài khoản");
@@ -34,7 +34,7 @@ namespace DataAccess.Repositories
 
         public override List<AccountDTO> GetAll()
         {
-            List<Account> products = _context.Accounts.Include(x => x.AccountRoles).ThenInclude(x => x.Role).ToList();
+            List<Account> products = table.Include("AccountRoles.Role.RoleSidebars.Sidebar").ToList();
             List<AccountDTO> dto = new List<AccountDTO>() { };
             if (products != null && products.Count() > 0)
             {
@@ -43,5 +43,14 @@ namespace DataAccess.Repositories
             return dto;
         }
 
+        public override AccountDTO Get(long id)
+        {
+            Account basic = table.Include("AccountRoles.Role.RoleSidebars.Sidebar").FirstOrDefault(x=>x.Id==id);
+            if (basic == null || basic.Status == 0)
+            {
+                throw new Exception("Không tìm thấy hoặc đã bị xóa");
+            }
+            return _mapper.Map<AccountDTO>(basic);
+        }
     }
 }

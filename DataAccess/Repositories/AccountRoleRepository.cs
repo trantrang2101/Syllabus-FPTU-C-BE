@@ -10,13 +10,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class AccountRoleRepository : BaseRespository<AccountRole, AccountRoleDTO>, IAccountRoleRepository
+    public class AccountRoleRepository : BaseRespository<AccountRole, AccountRoleDTO>, IAccountRoleRepository 
     {
-        private static IAccountRoleRepository _accountRoleRepository;
-
-        public AccountRoleRepository(IMapper mapper, DatabaseContext context, IAccountRoleRepository accountRoleRepository) : base(mapper, context)
+        public AccountRoleRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _accountRoleRepository = accountRoleRepository;
         }
     }
 }

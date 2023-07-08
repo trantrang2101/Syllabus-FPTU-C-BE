@@ -12,10 +12,8 @@ namespace DataAccess.Repositories
 {
     public class StudentProgressRepository : BaseRespository<StudentProgress, StudentProgressDTO>, IStudentProgressRepository
     {
-        private static IStudentProgressRepository _studentProgressRepository;
-        public StudentProgressRepository(IMapper mapper, DatabaseContext context, IStudentProgressRepository studentProgressRepository) : base(mapper, context)
+        public StudentProgressRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _studentProgressRepository = studentProgressRepository;
         }
     }
 }

@@ -12,10 +12,8 @@ namespace DataAccess.Repositories
 {
     public class RoleSidebarRepository : BaseRespository<RoleSidebar, RoleSidebarDTO>, IRoleSidebarRepository
     {
-        private static IRoleSidebarRepository _roleSidebarRepository;
-        public RoleSidebarRepository(IMapper mapper, DatabaseContext context, IRoleSidebarRepository roleSidebarRepository) : base(mapper, context)
+        public RoleSidebarRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _roleSidebarRepository = roleSidebarRepository;
         }
     }
 }

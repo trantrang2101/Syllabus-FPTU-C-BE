@@ -12,10 +12,8 @@ namespace DataAccess.Repositories
 {
     public class MajorRepository : BaseRespository<Major, MajorDTO>, IMajorRepository
     {
-        private static IMajorRepository _majorRepository;
-        public MajorRepository(IMapper mapper, DatabaseContext context, IMajorRepository majorRepository) : base(mapper, context)
+        public MajorRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _majorRepository = majorRepository;
         }
     }
 }

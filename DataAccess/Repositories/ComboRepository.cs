@@ -12,10 +12,8 @@ namespace DataAccess.Repositories
 {
     public class ComboRepository : BaseRespository<Combo, ComboDTO>, IComboRepository
     {
-        private static IComboRepository _comboRepository;
-        public ComboRepository(IMapper mapper, DatabaseContext context, IComboRepository comboRepository) : base(mapper, context)
+        public ComboRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _comboRepository = comboRepository;
         }
     }
 }

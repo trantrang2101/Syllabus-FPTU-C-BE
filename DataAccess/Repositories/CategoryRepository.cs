@@ -12,11 +12,9 @@ namespace DataAccess.Repositories
 {
     public class CategoryRepository : BaseRespository<Category, CategoryDTO>, ICategoryRepository
     {
-        private static ICategoryRepository _categoryRepository;
 
-        public CategoryRepository(IMapper mapper, DatabaseContext context, ICategoryRepository categoryRepository) : base(mapper, context)
+        public CategoryRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _categoryRepository = categoryRepository;
         }
     }
 }

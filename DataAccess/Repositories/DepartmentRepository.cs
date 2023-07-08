@@ -12,10 +12,8 @@ namespace DataAccess.Repositories
 {
     public class DepartmentRepository : BaseRespository<Department, DepartmentDTO>, IDepartmentRepository
     {
-        private static IDepartmentRepository _departmentRepository;
-        public DepartmentRepository(IMapper mapper, DatabaseContext context, IDepartmentRepository departmentRepository) : base(mapper, context)
+        public DepartmentRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
-            _departmentRepository = departmentRepository;
         }
     }
 }
