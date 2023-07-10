@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication;
+using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -24,9 +26,14 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddControllers().AddNewtonsoftJson().AddOData(option => option.Expand().Filter().Select().SetMaxTop(null).OrderBy());
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(option =>
+builder.Services.AddAuthentication(item =>
+{
+    item.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    item.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(option =>
     {
+        option.SaveToken = true;
+        option.RequireHttpsMetadata = true;
         option.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,

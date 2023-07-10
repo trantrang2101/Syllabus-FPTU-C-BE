@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = "head")]
         public virtual IActionResult Detail(int id)
         {
             try

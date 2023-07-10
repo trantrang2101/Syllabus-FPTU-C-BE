@@ -22,10 +22,14 @@ namespace DataAccess.Repositories
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Email, member.Email));
+            claims.Add(new Claim(ClaimTypes.Name, member.Name));
+            foreach (RoleDTO role in member.Roles)
             {
-                new Claim(JwtRegisteredClaimNames.Email,member.Email),
-            };
+                claims.Add(new Claim(ClaimTypes.Role,role.Code));
+            }
+
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                audience: _config["Jwt:Audience"],
