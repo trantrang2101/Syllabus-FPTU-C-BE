@@ -16,11 +16,11 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string email)
+        public IActionResult Login(string gmail)
         {
             try
             {
-                return Ok(new BaseResponse<string>().successWithData(_repository.Login(email)).ToJson());
+                return Ok(new BaseResponse<AccountDTO>().successWithData(_repository.Login(gmail)).ToJson());
             }
             catch (Exception ex)
             {

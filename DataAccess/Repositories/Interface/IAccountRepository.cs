@@ -10,6 +10,6 @@ namespace DataAccess.Repositories.Interface
 {
     public interface IAccountRepository : IBaseRepository<Account,AccountDTO>
     {
-        string Login(string username);
+        AccountDTO Login(string username);
     }
 }

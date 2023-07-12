@@ -15,21 +15,22 @@ namespace DataAccess.Repositories
             _authenticationRepository = authenticationRepository;
         }
 
-        public string Login(string gmail)
+        public AccountDTO Login(string gmail)
         {
             if (string.IsNullOrEmpty(gmail))
             {
                 throw new Exception("Trường Email là trường bắt buộc");
             }
             Account? acc = table.Where(x => x.Email.ToLower() == gmail.ToLower())
-                .Include("AccountRoles.Role").FirstOrDefault();
+                .Include("AccountRoles.Role.RoleSidebars.Sidebar").FirstOrDefault();
             if (acc == null)
             {
                 throw new Exception("Không tìm thấy tài khoản");
             }
             AccountDTO account = _mapper.Map<AccountDTO>(acc);
             string token = _authenticationRepository.GetJwtToken(account);
-            return token;
+            account.Token = token;
+            return account;
         }
 
         public override List<AccountDTO> GetAll()
