@@ -10,7 +10,11 @@
             asp-append-version="true" />
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://accounts.google.com/gsi/client" async></script>
+
     </head>
+
+@await RenderSectionAsync("Styles", required: false)
     <body>
         <nav
             class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white"
@@ -299,16 +303,16 @@
                         href="javascript:void(0);" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                        <img class="img-fluid" *ngIf="photo" [src]="photo" />
+                        <img class="img-fluid user-image" />
                     </a>
                     <div
                         class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
                         aria-labelledby="navbarDropdownUserImage">
                         <h6 class="dropdown-header d-flex align-items-center">
-                            <img class="dropdown-user-img" [src]="photo" />
+                            <img class="dropdown-user-img user-image" />
                             <div class="dropdown-user-details">
-                                <div class="dropdown-user-details-name">{{user?.name}}</div>
-                                <div class="dropdown-user-details-email">{{user?.email}}</div>
+                            <div class="dropdown-user-details-name user-details-name">{{user?.name}}</div>
+                            <div class="dropdown-user-details-email user-details-email">{{user?.email}}</div>
                             </div>
                         </h6>
                         <div class="dropdown-divider"></div>
@@ -317,7 +321,7 @@
                                     data-feather="settings"></i></div>
                             Account
                         </a>
-                        <a class="dropdown-item" (click)="logout()">
+                        <a class="dropdown-item" onclick="logout()">
                             <div class="dropdown-item-icon"><i
                                     data-feather="log-out"></i></div>
                             Đăng xuất
@@ -354,8 +358,8 @@
                     </div>
                     <div class="sidenav-footer">
                         <div class="sidenav-footer-content">
-                            <div class="sidenav-footer-name">{{user?.name}}</div>
-                            <div class="sidenav-footer-subname">{{user?.email}}</div>
+                        <div class="sidenav-footer-name user-details-name">{{user?.name}}</div>
+                        <div class="sidenav-footer-subname user-details-email">{{user?.email}}</div>
                         </div>
                     </div>
                 </nav>
@@ -371,14 +375,17 @@
                                     class="row align-items-center justify-content-between">
                                     <div class="col-auto page-header-fpt">
                                         <h1 class="page-header-title">
-                                            <div class="page-header-icon me-3"><i
-                                                    *ngIf="icon"
-                                                    [classList]="icon"></i></div>
-                                            {{title}}
+                                        @if (ViewData["Icon"] != null)
+                                        {
+                                            <div class="page-header-icon me-3"><i class="@ViewData["Icon"]"></i></div>
+                                        }
+                                        @ViewData["Title"]
                                         </h1>
-                                        <div class="page-header-subtitle"
-                                            *ngIf="subtitle">{{subtitle}}</div>
-                                    </div>
+                                    @if (@ViewData["SubTitle"]!=null)
+                                    {
+                                        <div class="page-header-subtitle">@ViewData["SubTitle"]</div>
+                                    }
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -387,9 +394,26 @@
                 </main>
             </div>
         </div>
+
+        
+    <button type="button" class="btn btn-primary d-none" id="liveToastBtn">Show live toast</button>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @ViewData["PopupMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/feather.js" asp-append-version="true"></script>
+    <script src="~/js/header.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
+    <script src="~/js/feather.js" asp-append-version="true"></script>
         <script src="~/js/apiManager.js" asp-append-version="true"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/js/sidebar.js" asp-append-version="true"></script>

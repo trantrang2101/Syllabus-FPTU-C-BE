@@ -2,8 +2,10 @@
 using DataAccess.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace WebAPI.Controllers
 {
@@ -18,9 +20,8 @@ namespace WebAPI.Controllers
             _repository = repository;
         }
         [HttpGet]
-        [EnableQuery]
         [Authorize]
-        public virtual IActionResult List()
+        public virtual IActionResult List(ODataQueryOptions<D> opts)
         {
             try
             {
@@ -29,8 +30,13 @@ namespace WebAPI.Controllers
                 {
                     throw new Exception("Không tìm thấy danh sách thích hợp");
                 }
-
-                return Ok(new BaseResponse<List<D>>().successWithData(products).ToJson());
+                var query = opts.ApplyTo(products.AsQueryable());
+                var response = new
+                {
+                    content = query.AsQueryable(),
+                    totalCount = products.Count
+                };
+                return Ok(new BaseResponse<object>().successWithData(response).ToJson());
             }
             catch(Exception ex)
             {
@@ -38,7 +44,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        [Authorize(Roles = "head")]
+        [Authorize]
         public virtual IActionResult Detail(int id)
         {
             try

@@ -1,0 +1,47 @@
+﻿@{
+}
+
+<div class="container-fluid px-5 mt-n10">
+    <div class="row">
+        <div class="col-12 animated--fade-in-up">
+            <div class="card mb-4 mb-xl-0 overflow-auto" id="tableList">
+                <div class="card-body m-3 p-0 table-responsive boxscroll overflow-auto">
+                    <table class="table table-fixed">
+                        <thead class="">
+                            <tr class="text-center">
+                                <th>STT</th>
+                                <th>Ngành</th>
+                                <th>Mã</th>
+                                <th>Tên</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                </td>
+                                <td>
+                                    <input type="text" id="codeFilter" class="form-control"
+                                           placeholder="Tìm kiếm" />
+                                </td>
+                                <td>
+                                    <input type="text" id="nameFilter" class="form-control"
+                                           placeholder="Tìm kiếm" />
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-transparent d-flex align-items-end justify-content-end">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/curriculumn.js"></script>
+}

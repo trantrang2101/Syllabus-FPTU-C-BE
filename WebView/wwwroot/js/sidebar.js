@@ -5,10 +5,11 @@ $(document).ready(() => {
         if (menu) {
             for (let i = 0; i < menu.length; i++) {
                 const entity = menu[i];
-                const header = sidebar.createElement('div');
+                const header = document.createElement('div');
                 header.innerHTML = entity.name;
                 header.classList = 'sidenav-menu-heading';
-                createChildSidebar(entity.children, '0' + index, header);
+                if (entity.children)
+                    createChildSidebar(entity.children, '0' + i, header);
                 sidebar.appendChild(header);
             }
         }
@@ -32,11 +33,11 @@ function createChildSidebar(quickmenu, parent, currentNode) {
                 div.innerHTML = `<i class="${item.icon}"></i>`;
                 a.appendChild(div);
             }
-            const name = sidebar.createElement('span');
+            const name = document.createElement('span');
             name.innerHTML = item.name;
             a.appendChild(name);
             currentNode.appendChild(a)
-            const div = sidebar.createElement('div');
+            const div = document.createElement('div');
             div.setAttribute('class', 'collapsed');
             div.setAttribute('id', `${parent}${i+''}`);
             div.setAttribute('data-bs-parent', `#${parent}`);
@@ -48,16 +49,16 @@ function createChildSidebar(quickmenu, parent, currentNode) {
             createChildSidebar(item.children, parent + (i + ''), div)
             currentNode.appendChild(div);
         } else {
-            const a = sidebar.createElement('a');
+            const a = document.createElement('a');
             a.href = item.url;
             a.classList = 'nav-link';
             if (item.icon) {
-                const div = a.createElement('div');
+                const div = document.createElement('div');
                 div.classList = 'nav-link-icon';
                 div.innerHTML = `<i class="${item.icon}"></i>`;
                 a.appendChild(div);
             }
-            const name = sidebar.createElement('span');
+            const name = document.createElement('span');
             name.innerHTML = item.name;
             a.appendChild(name);
             currentNode.appendChild(a);

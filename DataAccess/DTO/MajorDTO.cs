@@ -14,7 +14,5 @@ namespace DataAccess.DTO
         public string? Name { get; set; }
 
         public virtual MajorDTO? Parent { get; set; }
-        public virtual ICollection<CurriculumDTO> Curricula { get; set; } = new HashSet<CurriculumDTO>();
-        public virtual ICollection<MajorDTO> InverseParent { get; set; } = new HashSet<MajorDTO>();
     }
 }

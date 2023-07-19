@@ -5,9 +5,9 @@
 window.addEventListener('DOMContentLoaded', event => {
     feather.replace();
 
-    const sidebar = document.body.classList.toggle('sidenav-toggled');
+    const sidebar = document.querySelector('#sidebarToggle');
     if (sidebar) {
-        sidebar.addEventListener('click', () => {
+        sidebar.addEventListener('change', () => {
             localStorage.setItem(
                 'sidebar-toggle',
                 document.body.classList.contains('sidenav-toggled')
@@ -62,5 +62,14 @@ window.addEventListener('DOMContentLoaded', event => {
     }
     setTimeout(() => {
         feather.replace();
-    })
+    });
+    const toastTrigger = document.getElementById('liveToastBtn')
+    const toastLiveExample = document.getElementById('liveToast')
+
+    if (toastTrigger) {
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        toastTrigger.addEventListener('click', () => {
+            toastBootstrap.show()
+        })
+    }
 });
