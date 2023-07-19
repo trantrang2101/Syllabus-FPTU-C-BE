@@ -60,6 +60,27 @@ var APIManager = {
     }
 };
 var GeneralManage = {
+    buildNested:(arr, parentId = 0)=>{
+        if (arr && arr.length > 0) {
+            let result = [];
+            const list = arr.filter((x) => (x.parent ? x.parent.id : 0) === parentId);
+            console.log(list);
+            if (list.length > 0) {
+                for (let item of list) {
+                    let children = GeneralManage.buildNested(arr, item.id);
+                    if (children.length) {
+                        item.children = children;
+                    } else {
+                        delete item.children;
+                    }
+                    delete item.parent;
+                    result.push({ ...item, expand: false });
+                }
+            }
+            return result;
+        }
+        return [];
+    },
     createEditor(name) {
         return ClassicEditor
             .create(document.querySelector(`[name=${name}]`))
