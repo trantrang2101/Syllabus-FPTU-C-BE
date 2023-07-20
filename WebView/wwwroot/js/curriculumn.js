@@ -1,4 +1,7 @@
-$(document).ready(() => {
+﻿$(document).ready(() => {
+    if (window.location.href.toLowerCase().includes("manager/curriculum")) {
+        onFilter(true);
+    }
     if (window.location.href.toLowerCase().includes("curriculum/list")) {
         onFilter();
         $("#codeFilter,#nameFilter").keyup(function (event) {
@@ -7,8 +10,16 @@ $(document).ready(() => {
             }
         });
     }
-    if (window.location.href.toLowerCase().includes("manager/curriculum")) {
-        onFilter(true);
+    if (window.location.href.toLowerCase().includes("Curriculum/Detail")) {
+        if (localStorage.getItem("detail")) {
+            const curriculum = JSON.parse(localStorage.getItem("detail"));
+            console.log(curriculum)
+            $(".page-header-title span").innerHTML = curriculum.name;
+            $(".page-header-subtitle").innerHTML = curriculum.description;
+            localStorage.removeItem("detail");
+        } else {
+            window.history.back();
+        }
     }
 });
 function getFilter() {
@@ -31,21 +42,24 @@ function callListAPI(page, itemsPerPage, isManager) {
             GeneralManage.createPagination(page, response.data.totalCount, itemsPerPage, "tableList", onChangePage);
 
             function onChangePage(item) {
-                callListAPI(item, itemsPerPage);
+                callListAPI(item, itemsPerPage, isManager); 
             }
 
             function onSelect(item) {
-                if (isManager) {
-                    $('#btnDelete').prop('disabled', false);
-                    const callDetail = new Promise((resolve, reject) => {
-                        Manager.CurriculumManager.Detail(item.id, resolve);
-                    })
-                    callDetail.then((resp) => {
-                        if (resp.code == "00") {
+                const callDetail = new Promise((resolve, reject) => {
+                    Manager.CurriculumManager.Detail(item.id, resolve);
+                })
+                callDetail.then((resp) => {
+                    if (resp.code == "00") {
+                        if (isManager) {
+                            $('#btnDelete').prop('disabled', false);
                             GeneralManage.setAllFormValue("formData", resp.data);
+                        } else {
+                            localStorage.setItem("detail", JSON.stringify(resp.data));
+                            window.location.href ="/Curriculum/Detail"
                         }
-                    })
-                }
+                    }
+                })
             }
         }
     })
@@ -82,17 +96,18 @@ function onFilter(isManager = false) {
                     onFilter(true);
                 }
             });
-        })
+        });
+
+        const callMajor = new Promise((resolve, reject) => {
+            Manager.MajorManager.GetAllList(0, 1000000, "Status ne 0", resolve);
+        });
+        callMajor.then((response) => {
+            if (response && response.code == "00") {
+                GeneralManage.createSelect(response.data.content, "id", "name", "major");
+            }
+        });
+        GeneralManage.createSelect([{ id: 1, name: "Kích hoạt" }, { id: 0, name: "Đóng" }], "id", "name", "status");
     }
 
     callListAPI(page, itemsPerPage, isManager);
-
-    const callMajor = new Promise((resolve, reject) => {
-        Manager.MajorManager.GetAllList(0, 1000000, "", resolve);
-    });
-    callMajor.then((response) => {
-        if (response && response.code == "00") {
-            GeneralManage.createSelect(response.data.content, "id", "name", "major");
-        }
-    });
 }

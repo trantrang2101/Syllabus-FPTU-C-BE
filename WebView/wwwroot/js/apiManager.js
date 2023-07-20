@@ -95,7 +95,8 @@ var GeneralManage = {
                 if ($(this).is('ckeditor')) {
                     editors[$(this).attr("name")].setData(GeneralManage.ObjectByString(object, $(this).attr("name")) ? GeneralManage.ObjectByString(object, $(this).attr("name")) : "")
                 } else {
-                    $(this).val(GeneralManage.ObjectByString(object, $(this).attr("name")) ? GeneralManage.ObjectByString(object, $(this).attr("name")):"");
+                    const value = GeneralManage.ObjectByString(object, $(this).attr("name"));
+                    $(this).val(value !== null && value !== undefined? value:"").change();;
                 }
             }
         });
@@ -143,6 +144,7 @@ var GeneralManage = {
     },
     createSelect: (list, nameValue, nameDisplay, idName) => {
         const select = document.querySelector(`#${idName}`);
+        select.innerHTML=""
         if (list) {
             list.forEach((item, index) => {
                 option = document.createElement("option");

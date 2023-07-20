@@ -10,15 +10,11 @@ namespace WebView.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult SetViewData(CurriculumDTO value)
-        {
-            ViewData["Title"] = "Home Page";
-            ViewData["SubTitle"] = "Home Page";
-            ViewData["Icon"] = "fa-solid fa-book-bookmark";
-            return new EmptyResult();
-        }
         public IActionResult Detail()
+        {
+            return View();
+        }
+        public IActionResult List()
         {
             return View();
         }
