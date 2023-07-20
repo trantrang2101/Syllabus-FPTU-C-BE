@@ -89,30 +89,44 @@ var GeneralManage = {
             })
             .catch(err => console.error(err.stack));
     },
-    setAllFormValue: (formId, object) => {
+    setAllFormValue: (formId, object,isSetHeight=true) => {
         $(`#${formId} [name]`).each(function () {
             if ($(this) && $(this).attr("name") && $(this).attr("name").length > 0) {
+                const value = GeneralManage.ObjectByString(object, $(this).attr("name"));
                 if ($(this).is('ckeditor')) {
-                    editors[$(this).attr("name")].setData(GeneralManage.ObjectByString(object, $(this).attr("name")) ? GeneralManage.ObjectByString(object, $(this).attr("name")) : "")
+                    editors[$(this).attr("name")].setData(value !== null && value !== undefined ? value : "")
+                } else if ($(this).is('div')) {
+                    $(this).html(value !== null && value !== undefined ? value : $(this).first().val()).change();;
+                } else if ($(this).is('select')) {
+                    $(this).val(value !== null && value !== undefined ? value : $(this).first().val()).change();;
                 } else {
                     const value = GeneralManage.ObjectByString(object, $(this).attr("name"));
                     $(this).val(value !== null && value !== undefined? value:"").change();;
                 }
             }
         });
-        $('#' + formId).height($(window).height() - 410);
+        if (isSetHeight) {
+            $('#' + formId).height($(window).height() - 410);
+        }
     },
     getAllFormValue : (formId)=> {
         const fieldPair = {}
         $(`#${formId} [name]`).each(function () {
             if ($(this) && $(this).attr("name") && $(this).attr("name").length > 0) {
-                (GeneralManage.StringToObject(fieldPair,$(this).attr("name"), $(this).is('ckeditor') ? editors[$(this).attr("name")].getData() : $(this).val()))
+                if ($(this).is('ckeditor'))
+                    (GeneralManage.StringToObject(fieldPair, $(this).attr("name"), editors[$(this).attr("name")].getData()))
+                else if ($(this).attr('type') === 'date' || $(this).hasClass("datepicker"))
+                    (GeneralManage.StringToObject(fieldPair, $(this).attr("name"), $(this).val()));
+                else
+                    (GeneralManage.StringToObject(fieldPair, $(this).attr("name"), parseFloat($(this).val()) ? parseFloat($(this).val()) : $(this).val()));
             }
         });
-        console.log(fieldPair)
         return fieldPair;
     },
-    StringToObject: (result,inputString, value) => {
+    StringToObject: (result, inputString, value) => {
+        if (!value) {
+            return;
+        }
         const key = inputString.trim();
 
         const keys = key.split('.');
@@ -125,7 +139,7 @@ var GeneralManage = {
             nestedObj = nestedObj[nestedKey];
         }
 
-        nestedObj[finalKey] = parseFloat(value) ? parseFloat(value) : value;
+        nestedObj[finalKey] = value;
         return result;
     },
     ObjectByString: (o, s)=> {
@@ -141,6 +155,14 @@ var GeneralManage = {
             }
         }
         return o;
+    },
+    getParameterByName:(name, url = window.location.href) => {
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
     },
     createSelect: (list, nameValue, nameDisplay, idName) => {
         const select = document.querySelector(`#${idName}`);
@@ -249,6 +271,52 @@ var Manager = {
 
         Delete: (id, resolve) => {
             const url = `https://localhost:7124/api/Curriculum/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
+    },
+    TermManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/Term/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/Term/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Term/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Term/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/Term/Delete/${id}`;
             APIManager.DeleteAPI(url, onSuccess);
 
             function onSuccess(response) {

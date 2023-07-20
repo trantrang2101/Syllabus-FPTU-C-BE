@@ -23938,3 +23938,6 @@ ng-select {
 tr {
     cursor: pointer;
 }
+.datepicker {
+    padding: 0.875rem 1.125rem !important;
+}

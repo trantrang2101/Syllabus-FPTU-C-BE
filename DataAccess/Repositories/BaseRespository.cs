@@ -21,9 +21,9 @@ namespace DataAccess.Repositories
 
         public virtual D Add(D dto)
         {
-            if (dto != null)
+            if (dto == null)
             {
-                return null;
+                throw new Exception("Chưa truyền giá trị vào");
             }
             B basic = _mapper.Map<B>(dto);
             B saveBasic = table.Add(basic).Entity;

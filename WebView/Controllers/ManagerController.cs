@@ -22,5 +22,10 @@ namespace WebView.Controllers
         {
             return View();
         }
+
+        public IActionResult Term()
+        {
+            return View();
+        }
     }
 }

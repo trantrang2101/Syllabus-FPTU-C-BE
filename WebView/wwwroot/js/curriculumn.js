@@ -10,16 +10,16 @@
             }
         });
     }
-    if (window.location.href.toLowerCase().includes("Curriculum/Detail")) {
-        if (localStorage.getItem("detail")) {
-            const curriculum = JSON.parse(localStorage.getItem("detail"));
-            console.log(curriculum)
-            $(".page-header-title span").innerHTML = curriculum.name;
-            $(".page-header-subtitle").innerHTML = curriculum.description;
-            localStorage.removeItem("detail");
-        } else {
-            window.history.back();
-        }
+    if (window.location.href.toLowerCase().includes("curriculum/detail")) {
+        console.log(GeneralManage.getParameterByName("id"));
+        const callDetail = new Promise((resolve, reject) => {
+            Manager.CurriculumManager.Detail(GeneralManage.getParameterByName("id"), resolve);
+        })
+        callDetail.then((resp) => {
+            if (resp.code == "00") {
+                GeneralManage.setAllFormValue("curriculumDetail", resp.data,false);
+            }
+        })
     }
 });
 function getFilter() {
@@ -55,8 +55,18 @@ function callListAPI(page, itemsPerPage, isManager) {
                             $('#btnDelete').prop('disabled', false);
                             GeneralManage.setAllFormValue("formData", resp.data);
                         } else {
-                            localStorage.setItem("detail", JSON.stringify(resp.data));
-                            window.location.href ="/Curriculum/Detail"
+                            $.ajax({
+                                url: '/Curriculum/SetSessionData',
+                                type: 'POST',
+                                data: { key: "Detail", value: JSON.stringify(resp.data) },
+                                success: function (data) {
+                                    window.location.href = "/Curriculum/Detail?id=" + resp.data.id
+                                },
+                                error: function (xhr, status, error) {
+                                    // Handle error if needed
+                                    console.error("Error setting session data:", error);
+                                }
+                            });
                         }
                     }
                 })

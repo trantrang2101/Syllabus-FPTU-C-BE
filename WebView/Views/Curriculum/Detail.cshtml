@@ -1,6 +1,41 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
-    ViewData["SubTitle"] = "Home Page";
     ViewData["Icon"] = "fa-solid fa-book-bookmark";
 }
+<div class="container-fluid px-5 mt-n10">
+    <div class="row">
+        <div class="col-12 animated--fade-in-up">
+            <div class="card p-3 mb-4 curriculum-detail" id="curriculumDetail">
+                <div class="card-body m-3 p-0 row g-3">
+                    <h6 class="col-1 col-lg-2">Mã</h6>
+                    <div class="col-11 col-lg-10" name="code"></div>
+                    <h6 class="col-1 col-lg-2">Tên</h6>
+                    <div class="col-11 col-lg-10" name="major.name"></div>
+                    <h6 class="col-1 col-lg-2">Ngành</h6>
+                    <div class="col-11 col-lg-10" name="name"></div>
+                    <h6 class="col-1 col-lg-2">Mô tả</h6>
+                    <div class="col-11 col-lg-10" name="description"></div>
+                </div>
+            </div>
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-body m-0 p-0 table-responsive boxscroll overflow-auto">
+                    <table class="table table-fixed">
+                        <thead class="">
+                            <tr class="text-center">
+                                <td style="width: 10rem;"></td>
+                                <th style="width: 10rem;">Mã</th>
+                                <th>Tên</th>
+                                <th style="width: 10rem;">Số tín chỉ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+@section Scripts{
+    <script src="~/js/curriculumn.js"></script>
+}
