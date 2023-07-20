@@ -27,5 +27,9 @@ namespace WebView.Controllers
         {
             return View();
         }
+        public IActionResult Subject()
+        {
+            return View();
+        }
     }
 }

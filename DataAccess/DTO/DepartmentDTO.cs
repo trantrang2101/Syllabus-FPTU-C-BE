@@ -10,7 +10,5 @@ namespace DataAccess.DTO
     public partial class DepartmentDTO : BasicModel
     {
         public string? Name { get; set; }
-
-        public virtual ICollection<SubjectDTO> Subjects { get; set; } = new HashSet<SubjectDTO>();
     }
 }

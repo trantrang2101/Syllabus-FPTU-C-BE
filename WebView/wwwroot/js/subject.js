@@ -1,19 +1,25 @@
 ﻿$(document).ready(() => {
-    if (window.location.href.toLowerCase().includes("manager/term")) {
+    if (window.location.href.toLowerCase().includes("manager/subject")) {
         onFilter(true);
     }
 });
 function getFilter() {
     const filter = [];
+    if ($("#codeFilter") && $("#codeFilter").val() && $("#codeFilter").val().trim()) {
+        filter.push(`contains(code,'${$("#codeFilter").val()}')`)
+    }
+    if ($("#nameFilter") && $("#nameFilter").val() && $("#nameFilter").val().trim()) {
+        filter.push(`contains(name,'${$("#nameFilter").val()}')`)
+    }
     return (filter.length > 0 ? filter.join(" and "):"");
 }
 function callListAPI(page, itemsPerPage, isManager) {
     const callAPI = new Promise((resolve, reject) => {
-        Manager.TermManager.GetAllList(page, itemsPerPage, getFilter(), resolve)
+        Manager.SubjectManager.GetAllList(page, itemsPerPage, getFilter(), resolve)
     });
     callAPI.then((response) => {
         if (response && response.code == "00") {
-            GeneralManage.createTable(response.data.content.map((x) => ({ ...x, startDateShow: moment(x.startDate).format("DD/MM/YYYY"), endDateShow: moment(x.endDate).format("DD/MM/YYYY") })), ["startDateShow", "endDateShow", "name"], page, itemsPerPage, "tableList", onSelect);
+            GeneralManage.createTable(response.data.content, ["department.name", "code", "name"], page, itemsPerPage, "tableList", onSelect);
             GeneralManage.createPagination(page, response.data.totalCount, itemsPerPage, "tableList", onChangePage);
 
             function onChangePage(item) {
@@ -22,7 +28,7 @@ function callListAPI(page, itemsPerPage, isManager) {
 
             function onSelect(item) {
                 $('#btnDelete').prop('disabled', false);
-                GeneralManage.setAllFormValue("formData", { ...item, startDate: moment(item.startDate).format("YYYY-MM-DD"), endDate : moment(item.endDate).format("YYYY-MM-DD") });
+                GeneralManage.setAllFormValue("formData", item);
             }
         }
     })
@@ -33,7 +39,7 @@ function onFilter(isManager = false) {
         $('#btnDelete').prop('disabled', true);
         $('#btnDelete').on('click', () => {
             const callDelete = new Promise((resolve, reject) => {
-                Manager.TermManager.Delete($('[name="id"]').val(), resolve)
+                Manager.SubjectManager.Delete($('[name="id"]').val(), resolve)
             });
             callDelete.then((response) => {
                 if (response && response.code == "00") {
@@ -48,13 +54,9 @@ function onFilter(isManager = false) {
         $('#btnSave').on('click', () => {
             const callSave = new Promise((resolve, reject) => {
                 if ($('[name="id"]').val()) {
-                    console.log("update");
-                    Manager.TermManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
+                    Manager.SubjectManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
                 } else {
-                    console.log("update");
-                    const value = GeneralManage.getAllFormValue('formData');
-                    delete value['id'];
-                    Manager.TermManager.Add(value, resolve)
+                    Manager.SubjectManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
                 }
             });
             callSave.then((response) => {
@@ -62,6 +64,15 @@ function onFilter(isManager = false) {
                     onFilter(true);
                 }
             });
+        });
+
+        const callDepartment = new Promise((resolve, reject) => {
+            Manager.DepartmentManager.GetAllList(0, 1000000, "Status ne 0", resolve);
+        });
+        callDepartment.then((response) => {
+            if (response && response.code == "00") {
+                GeneralManage.createSelect(response.data.content, "id", "name", "department");
+            }
         });
         GeneralManage.createSelect([{ id: 1, name: "Kích hoạt" }, { id: 0, name: "Đóng" }], "id", "name", "status");
     }

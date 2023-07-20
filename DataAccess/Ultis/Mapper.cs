@@ -55,7 +55,8 @@ namespace DataAccess.Ultis
 
             CreateMap<StudentProgress, StudentProgressDTO>().ReverseMap();
 
-            CreateMap<Subject, SubjectDTO>().ReverseMap();
+            CreateMap<SubjectDTO,Subject>().ForMember(des => des.DepartmentId,
+                act => act.MapFrom(o => o.Department.Id)).ReverseMap();
 
             CreateMap<Term, TermDTO>().ReverseMap();
         }

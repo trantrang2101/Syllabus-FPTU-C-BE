@@ -4,7 +4,14 @@
 // Write your JavaScript code.
 window.addEventListener('DOMContentLoaded', event => {
     feather.replace();
-
+    if ($('.datepicker')) {
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+            langulage: 'vi'
+        });
+    }
     const sidebar = document.querySelector('#sidebarToggle');
     if (sidebar) {
         sidebar.addEventListener('change', () => {

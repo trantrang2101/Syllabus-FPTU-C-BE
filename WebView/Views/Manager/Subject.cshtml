@@ -17,19 +17,6 @@
                                 <th>Mã</th>
                                 <th>Tên</th>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                </td>
-                                <td>
-                                    <input type="text" id="codeFilter" class="form-control"
-                                           placeholder="Tìm kiếm" />
-                                </td>
-                                <td>
-                                    <input type="text" id="nameFilter" class="form-control"
-                                           placeholder="Tìm kiếm" />
-                                </td>
-                            </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
@@ -49,22 +36,28 @@
                     <form id="formData" class="d-flex justify-content-start align-items-start flex-column">
                         <input type="number" class="form-control d-none" name="id">
                         <div class="col-12">
-                            <label for="major" class="form-label">Chuyên ngành</label>
-                            <select class="form-select" name="major.id" id="major"></select>
-                        </div>
-                        <div class="col-12">
                             <label for="name" class="form-label">Tên</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Tên chương trình học">
+                                   placeholder="Tên môn học">
                         </div>
                         <div class="col-12">
                             <label for="code" class="form-label">Mã</label>
                             <input type="text" class="form-control" id="code" name="code"
-                                   placeholder="Mã chương trình học">
+                                   placeholder="Mã môn học">
                         </div>
                         <div class="col-12">
-                            <label for="description" class="form-label">Mô tả</label>
-                            <ckeditor name="description"></ckeditor>
+                            <label for="credit" class="form-label">Số tín chỉ</label>
+                            <input type="number" class="form-control" id="credit" name="credit"
+                                   placeholder="Số tín chỉ môn học">
+                        </div>
+                        <div class="col-12">
+                            <label for="slot" class="form-label">Số tiết học</label>
+                            <input type="number" class="form-control" id="slot" name="slot"
+                                   placeholder="Số tiết môn học">
+                        </div>
+                        <div class="col-12">
+                            <label for="department" class="form-label">Ban</label>
+                            <select class="form-select" name="department.id" id="department"></select>
                         </div>
                         <div class="col-12">
                             <label for="status" class="form-label">Trạng thái</label>
@@ -89,5 +82,5 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/curriculumn.js"></script>
+    <script src="~/js/subject.js"></script>
 }
