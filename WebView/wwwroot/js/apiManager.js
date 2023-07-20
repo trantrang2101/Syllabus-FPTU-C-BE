@@ -60,7 +60,7 @@ var APIManager = {
     }
 };
 var GeneralManage = {
-    buildNested:(arr, parentId = 0)=>{
+    buildNested: (arr, parentId = 0) => {
         if (arr && arr.length > 0) {
             let result = [];
             const list = arr.filter((x) => (x.parent ? x.parent.id : 0) === parentId);
@@ -101,7 +101,7 @@ var GeneralManage = {
                     $(this).val(value !== null && value !== undefined ? value : $(this).first().val()).change();;
                 } else {
                     const value = GeneralManage.ObjectByString(object, $(this).attr("name"));
-                    $(this).val(value !== null && value !== undefined? value:"").change();;
+                    $(this).val(value !== null && value !== undefined ? value : "").change();;
                 }
             }
         });
@@ -109,7 +109,7 @@ var GeneralManage = {
             $('#' + formId).height($(window).height() - 410);
         }
     },
-    getAllFormValue : (formId)=> {
+    getAllFormValue: (formId) => {
         const fieldPair = {}
         $(`#${formId} [name]`).each(function () {
             if ($(this) && $(this).attr("name") && $(this).attr("name").length > 0) {
@@ -142,7 +142,7 @@ var GeneralManage = {
         nestedObj[finalKey] = value;
         return result;
     },
-    ObjectByString: (o, s)=> {
+    ObjectByString: (o, s) => {
         s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
         s = s.replace(/^\./, '');           // strip a leading dot
         var a = s.split('.');
@@ -166,7 +166,7 @@ var GeneralManage = {
     },
     createSelect: (list, nameValue, nameDisplay, idName) => {
         const select = document.querySelector(`#${idName}`);
-        select.innerHTML=""
+        select.innerHTML = ""
         if (list) {
             list.forEach((item, index) => {
                 option = document.createElement("option");
@@ -178,7 +178,7 @@ var GeneralManage = {
             select.innerHTML = '<option>Không tìm thấy</option>'
         }
     },
-    createTable: (list, listObjectKey,page,itemsPerPage, idName, onClickRow) => {
+    createTable: (list, listObjectKey, page, itemsPerPage, idName, onClickRow) => {
         const divContainer = document.getElementById(idName);
         const tBody = divContainer.querySelector(`#${idName} table tbody`);
         tBody.innerHTML = ""
@@ -204,7 +204,7 @@ var GeneralManage = {
         }
         $('#' + idName + ' .table-responsive').height($(window).height() - 350);
     },
-    createPaginationItem: (content, parent,onClickItem,page=null) => {
+    createPaginationItem: (content, parent, onClickItem, page = null) => {
         const li = document.createElement('li');
         li.innerHTML = `<a class="page-link" href="#">${content}</a>`;
         if (typeof content === "number" && page && page === (content - 1)) {
@@ -224,7 +224,7 @@ var GeneralManage = {
             GeneralManage.createPaginationItem('<span aria-hidden="true">&laquo;</span>', pagination, () => { onClickItem(page - 1) });
         }
         for (let i = 0; i < no; i++) {
-            GeneralManage.createPaginationItem(i+1, pagination, () => { onClickItem(i) },page);
+            GeneralManage.createPaginationItem(i + 1, pagination, () => { onClickItem(i) }, page);
         }
         if (page < no - 1) {
             GeneralManage.createPaginationItem('<span aria-hidden="true">&raquo;</span>', pagination, () => { onClickItem(page + 1) });
@@ -233,8 +233,8 @@ var GeneralManage = {
 }
 var Manager = {
     CurriculumManager: {
-        GetAllList: (page, itemsPerPage, filter,resolve) => {
-            const url = `https://localhost:7124/api/Curriculum/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter:""}`;
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/Curriculum/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
             APIManager.GetAPI(url, onSuccess);
 
             function onSuccess(response) {
@@ -242,7 +242,7 @@ var Manager = {
             }
         },
 
-        Detail: (id,resolve) => {
+        Detail: (id, resolve) => {
             const url = `https://localhost:7124/api/Curriculum/Detail/${id}`;
             APIManager.GetAPI(url, onSuccess);
 
@@ -420,6 +420,145 @@ var Manager = {
         GetAllList: (page, itemsPerPage, filter, resolve) => {
             const url = `https://localhost:7124/api/Major/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
             APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
+    },
+    AccountManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/Account/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/Account/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Account/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Account/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/Account/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
+    },
+    AssessmentManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/Assessment/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                console.log(response);
+                resolve(response)
+            }
+        },
+
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/Assessment/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Assessment/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Assessment/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/Assessment/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
+    },
+    CategoryManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/Category/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/Category/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Category/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Category/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/Category/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
 
             function onSuccess(response) {
                 resolve(response)

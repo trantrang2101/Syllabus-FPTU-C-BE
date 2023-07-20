@@ -23,7 +23,18 @@ namespace WebView.Controllers
             return View();
         }
 
-        public IActionResult Term()
+        public IActionResult Term(){
+            return View();
+        }
+        public IActionResult Account()
+        {
+            return View();
+        }
+        public IActionResult Assessment()
+        {
+            return View();
+        }
+        public IActionResult Category()
         {
             return View();
         }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -23,7 +24,11 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-builder.Services.AddControllers().AddNewtonsoftJson().AddOData(option => option.Filter().OrderBy().SetMaxTop(50));
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+})
+    .AddOData(option => option.Filter().OrderBy().SetMaxTop(50));
 builder.Services.AddAuthentication(item =>
 {
     item.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -53,8 +58,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<IComboRepository, ComboRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
-builder.Services.AddScoped<ICurriculumDetailRepository,CurriculumDetailRepository>();
-builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>(); 
+builder.Services.AddScoped<ICurriculumDetailRepository, CurriculumDetailRepository>();
+builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IGradeDetailRepository, GradeDetailRepository>();
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
@@ -62,7 +67,7 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleSidebarRepository, RoleSidebarRepository>();
 builder.Services.AddScoped<ISidebarRepository, SidebarRepository>();
 builder.Services.AddScoped<IStudentCourseRepository, StudentCourseRepository>();
-builder.Services.AddScoped<IStudentProgressRepository,StudentProgressRepository>();
+builder.Services.AddScoped<IStudentProgressRepository, StudentProgressRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<ITermRepository, TermRepository>();
 builder.Services.AddEndpointsApiExplorer();
