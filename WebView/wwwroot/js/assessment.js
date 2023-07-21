@@ -21,7 +21,7 @@
             window.history.back();
         }
     }
-});curriculum
+});
 function getFilter() {
     const filter = [];
     if ($("#codeFilter") && $("#codeFilter").val() && $("#codeFilter").val().trim()) {
@@ -76,6 +76,10 @@ function onFilter(isManager = false) {
             var old_element = document.getElementById("btnDelete");
             var new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
+            var myModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+            myModal.show();
+        })
+        $('#btnDeleteConfirm').on('click', () => {
             const callDelete = new Promise((resolve, reject) => {
                 Manager.AssessmentManager.Delete($('[name="id"]').val(), resolve)
             });
@@ -84,6 +88,8 @@ function onFilter(isManager = false) {
                     onFilter(true);
                 }
             });
+            var myModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+            myModal.hide();
         })
         $('#btnAdd').click(function (e) {
             if ($('tbody tr.table-primary')) {
