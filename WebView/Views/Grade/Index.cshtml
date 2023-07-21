@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Lớp học";
+    ViewData["SubTitle"] = "Các lớp học theo từng môn ở kỳ này của bạn";
+    ViewData["Icon"] = "fa-solid fa-star-and-crescent";
+}
+<div class="container-fluid px-5 mt-n10">
+    <div class="row">
+        <div class="col-xl-2 col-md-3 animated--fade-in-up">
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Kỳ học</div>
+                <div class="list-group list-group-flush small" id="listSemester">
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-3 animated--fade-in-up">
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Khóa học</div>
+                <div class="list-group list-group-flush small" id="listCourse">
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-6 col animated--fade-in-up" *ngIf="listMark">
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-body p-3 table-responsive">
+                    <table class="table ">
+                        <thead class="">
+                            <tr>
+                                <th>Các đánh giá</th>
+                                <th>Đánh giá chi tiết</th>
+                                <th>Tỷ trọng (%)</th>
+                                <th>Điểm</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let item of listMark">
+                                <tr *ngFor="let entity of item.assessment;let i=index">
+                                    <td class="fw-bold" *ngIf="i==0" [rowSpan]="item.assessment.length">{{item.category.name}}</td>
+                                    <td class="fw-semibold">{{entity.name}}</td>
+                                    <td>{{entity.weight}}</td>
+                                    <td>{{entity.mark}}</td>
+                                    <td>{{entity.comment}}</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/js/grade.js"></script>
+}

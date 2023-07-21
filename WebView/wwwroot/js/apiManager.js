@@ -60,20 +60,20 @@ var APIManager = {
     }
 };
 var GeneralManage = {
-    buildNested: (arr, parentId = 0) => {
+    buildNested: (arr, parentId = 0,parentProperty = "parent") => {
         if (arr && arr.length > 0) {
             let result = [];
-            const list = arr.filter((x) => (x.parent ? x.parent.id : 0) === parentId);
+            const list = arr.filter((x) => (x[parentProperty] ? x[parentProperty].id : 0) === parentId);
             console.log(list);
             if (list.length > 0) {
                 for (let item of list) {
-                    let children = GeneralManage.buildNested(arr, item.id);
+                    let children = GeneralManage.buildNested(arr, item.id, parentProperty);
                     if (children.length) {
                         item.children = children;
                     } else {
                         delete item.children;
                     }
-                    delete item.parent;
+                    delete item[parentProperty];
                     result.push({ ...item, expand: false });
                 }
             }
@@ -178,7 +178,7 @@ var GeneralManage = {
             select.innerHTML = '<option>Không tìm thấy</option>'
         }
     },
-    createTable: (list, listObjectKey, page, itemsPerPage, idName, onClickRow) => {
+    createTable: (list, listObjectKey, page, itemsPerPage, idName, onClickRow,stringFormat="",isStt=true) => {
         const divContainer = document.getElementById(idName);
         const tBody = divContainer.querySelector(`#${idName} table tbody`);
         tBody.innerHTML = ""
@@ -186,13 +186,18 @@ var GeneralManage = {
             list.forEach((item, index) => {
                 tr = tBody.insertRow(-1);
                 tr.classList = `row-${item.id}`
-                td = document.createElement("td");
-                td.classList = `text-center`
-                td.innerHTML = index + 1 + itemsPerPage * page;
-                tr.appendChild(td);
+                if (isStt) {
+                    td = document.createElement("td");
+                    td.classList = `text-center`
+                    td.innerHTML = index + 1 + itemsPerPage * page;
+                    tr.appendChild(td);
+                }
                 listObjectKey.forEach(key => {
                     td = document.createElement("td");
-                    td.innerHTML = GeneralManage.ObjectByString(item, key);
+                    td.innerHTML = stringFormat?stringFormat.replace(/\[\d+\]/g, match => {
+                        const index = parseInt(match.slice(1, -1));
+                        return GeneralManage.ObjectByString(item, key[index]);
+                    }) : GeneralManage.ObjectByString(item, key);;
                     tr.appendChild(td);
                 });
                 tr.addEventListener('click', () => {
@@ -318,6 +323,52 @@ var Manager = {
 
         Delete: (id, resolve) => {
             const url = `https://localhost:7124/api/Term/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
+    },
+    StudentCourseManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/StudentCourse/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/StudentCourse/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/StudentCourse/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/StudentCourse/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/StudentCourse/Delete/${id}`;
             APIManager.DeleteAPI(url, onSuccess);
 
             function onSuccess(response) {

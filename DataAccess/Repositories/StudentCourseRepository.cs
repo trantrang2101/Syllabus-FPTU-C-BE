@@ -2,6 +2,7 @@
 using BusinessObject.Models;
 using DataAccess.DTO;
 using DataAccess.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,12 @@ namespace DataAccess.Repositories
     {
         public StudentCourseRepository(IMapper mapper, DatabaseContext context) : base(mapper, context)
         {
+        }
+
+        public override List<StudentCourseDTO> GetAll()
+        {
+            List<StudentCourse> products = _context.StudentCourses.Include(x=>x.Student).Include("Course.Term").Include("Course.Class").Include("Course.Subject").ToList();
+            return _mapper.Map<List<StudentCourseDTO>>(products);
         }
     }
 }
