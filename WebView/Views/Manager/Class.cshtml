@@ -1,6 +1,6 @@
 ﻿@{
 
-    ViewData["Title"] = "Chương trình học";
+    ViewData["Title"] = "Lớp";
     ViewData["Icon"] = "fa-solid fa-list-check";
 }
 
@@ -13,28 +13,25 @@
                         <thead class="">
                             <tr class="text-center">
                                 <th>STT</th>
-                                <th>Ngành</th>
-                                <th>Mã</th>
+                                <th>Mã lớp</th>
                                 <th>Tên</th>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td>
-                                </td>
-                                <td>
                                     <input type="text" id="codeFilter" class="form-control"
-                                           placeholder="Tìm kiếm" />
+                                           placeholder="Tìm kiếm mã lớp" />
                                 </td>
                                 <td>
                                     <input type="text" id="nameFilter" class="form-control"
-                                           placeholder="Tìm kiếm" />
+                                           placeholder="Tìm kiếm tên" />
                                 </td>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
-                <div class="card-footer bg-transparent d-flex align-items-end justify-content-end overflow-auto">
+                <div class="card-footer bg-transparent d-flex align-items-end justify-content-end">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                         </ul>
@@ -49,22 +46,14 @@
                     <form id="formData" class="d-flex justify-content-start align-items-start flex-column">
                         <input type="number" class="form-control d-none" name="id">
                         <div class="col-12">
-                            <label for="major" class="form-label">Chuyên ngành</label>
-                            <select class="form-select" name="major.id" id="major"></select>
+                            <label for="code" class="form-label">Mã lớp</label>
+                            <input type="text" class="form-control" id="code" name="code"
+                                   placeholder="Tên đầu điểm">
                         </div>
                         <div class="col-12">
                             <label for="name" class="form-label">Tên</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Tên chương trình học">
-                        </div>
-                        <div class="col-12">
-                            <label for="code" class="form-label">Mã</label>
-                            <input type="text" class="form-control" id="code" name="code"
-                                   placeholder="Mã chương trình học">
-                        </div>
-                        <div class="col-12">
-                            <label for="description" class="form-label">Mô tả</label>
-                            <ckeditor name="description"></ckeditor>
+                                   placeholder="Tên đầu điểm">
                         </div>
                         <div class="col-12">
                             <label for="status" class="form-label">Trạng thái</label>
@@ -88,7 +77,6 @@
     </div>
 </div>
 
-
 <div class="modal" id="deleteConfirmModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -108,5 +96,5 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/curriculumn.js"></script>
+    <script src="~/js/class.js"></script>
 }

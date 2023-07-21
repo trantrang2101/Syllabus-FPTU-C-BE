@@ -708,5 +708,97 @@ var Manager = {
                 resolve(response)
             }
         }
+    },
+    ClassManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/Class/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/Class/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Class/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Class/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/Class/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
+    },
+    ComboManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/Combo/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/Combo/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Combo/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Combo/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/Combo/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
     }
 }
