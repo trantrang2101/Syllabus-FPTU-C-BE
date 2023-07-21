@@ -25,7 +25,8 @@ namespace DataAccess.Ultis
                 act => act.MapFrom(o => o.AccountRoles.SelectMany(ar => ar.Role.RoleSidebars.Select(rs=>rs.Sidebar))));
             CreateMap<AccountDTO,Account>();
 
-            CreateMap<Assessment, AssessmentDTO>().ReverseMap();
+            CreateMap<AssessmentDTO,Assessment>().ForMember(des => des.CategoryId,
+                act => act.MapFrom(o => o.Category.Id)).ReverseMap();
 
             CreateMap<Category, CategoryDTO>().ReverseMap();
 

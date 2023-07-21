@@ -27,6 +27,13 @@ function callListAPI(page, itemsPerPage, isManager) {
             }
 
             function onSelect(item) {
+                if ($('tbody tr.table-primary')) {
+                    $("tbody tr.table-primary").removeClass("table-primary");
+                }
+                if ($(`.row-${item.id}`)) {
+                    console.log($(`.row-${item.id}`))
+                    $(`.row-${item.id}`).addClass('table-primary');
+                }
                 $('#btnDelete').prop('disabled', false);
                 GeneralManage.setAllFormValue("formData", item);
             }
@@ -37,7 +44,10 @@ function onFilter(isManager = false) {
     var page = 0, itemsPerPage = 20;
     if (isManager) {
         $('#btnDelete').prop('disabled', true);
-        $('#btnDelete').on('click', () => {
+        $('#btnDelete').click(function (e) {
+            var old_element = document.getElementById("btnDelete");
+            var new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
             const callDelete = new Promise((resolve, reject) => {
                 Manager.SubjectManager.Delete($('[name="id"]').val(), resolve)
             });
@@ -47,11 +57,20 @@ function onFilter(isManager = false) {
                 }
             });
         })
-        $('#btnAdd').on('click', () => {
+        $('#btnAdd').click(function (e) {
+            if ($('tbody tr.table-primary')) {
+                $("tbody tr.table-primary").removeClass("table-primary");
+            }
+            var old_element = document.getElementById("btnAdd");
+            var new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
             GeneralManage.setAllFormValue('formData', {});
             $('#btnDelete').prop('disabled', true);
         })
-        $('#btnSave').on('click', () => {
+        $('#btnSave').click(function (e) {
+            var old_element = document.getElementById("btnSave");
+            var new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
             const callSave = new Promise((resolve, reject) => {
                 if ($('[name="id"]').val()) {
                     Manager.SubjectManager.Update(GeneralManage.getAllFormValue('formData'), resolve)

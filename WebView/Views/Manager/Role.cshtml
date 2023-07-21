@@ -1,6 +1,6 @@
 ﻿@{
 
-    ViewData["Title"] = "Đầu điểm";
+    ViewData["Title"] = "Chương trình học";
     ViewData["Icon"] = "fa-solid fa-list-check";
 }
 
@@ -13,10 +13,15 @@
                         <thead class="">
                             <tr class="text-center">
                                 <th>STT</th>
+                                <th>Mã</th>
                                 <th>Tên</th>
                             </tr>
                             <tr>
                                 <td></td>
+                                <td>
+                                    <input type="text" id="codeFilter" class="form-control"
+                                           placeholder="Tìm kiếm" />
+                                </td>
                                 <td>
                                     <input type="text" id="nameFilter" class="form-control"
                                            placeholder="Tìm kiếm" />
@@ -26,7 +31,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <div class="card-footer bg-transparent d-flex align-items-end justify-content-end">
+                <div class="card-footer bg-transparent d-flex align-items-end justify-content-end overflow-auto">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                         </ul>
@@ -43,11 +48,31 @@
                         <div class="col-12">
                             <label for="name" class="form-label">Tên</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Tên đầu điểm">
+                                   placeholder="Tên chương trình học">
+                        </div>
+                        <div class="col-12">
+                            <label for="code" class="form-label">Mã</label>
+                            <input type="text" class="form-control" id="code" name="code"
+                                   placeholder="Mã chương trình học">
+                        </div>
+                        <div class="col-12">
+                            <label for="description" class="form-label">Mô tả</label>
+                            <ckeditor name="description"></ckeditor>
                         </div>
                         <div class="col-12">
                             <label for="status" class="form-label">Trạng thái</label>
                             <select class="form-select" name="status" id="status"></select>
+                        </div>
+                        <div class="col-12 table-responsive" id="sidebarList">
+                            <table class="table table-fixed">
+                                <thead class="">
+                                    <tr class="text-center">
+                                        <th>STT</th>
+                                        <th>Mã</th>
+                                        <th>Tên</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </form>
                 </div>
@@ -68,5 +93,5 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/category.js"></script>
+    <script src="~/js/role.js"></script>
 }

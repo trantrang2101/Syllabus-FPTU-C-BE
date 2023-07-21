@@ -49,6 +49,13 @@ function callListAPI(page, itemsPerPage, isManager) {
             }
 
             function onSelect(item) {
+                if ($('tbody tr.table-primary')) {
+                    $("tbody tr.table-primary").removeClass("table-primary");
+                }
+                if ($(`.row-${item.id}`)) {
+                    console.log($(`.row-${item.id}`))
+                    $(`.row-${item.id}`).addClass('table-primary');
+                }
                 const callDetail = new Promise((resolve, reject) => {
                     Manager.AccountManager.Detail(item.id, resolve);
                 })
@@ -72,7 +79,10 @@ function onFilter(isManager = false) {
     if (isManager) {
         GeneralManage.createEditor('description');
         $('#btnDelete').prop('disabled', true);
-        $('#btnDelete').on('click', () => {
+        $('#btnDelete').click(function (e) {
+            var old_element = document.getElementById("btnDelete");
+            var new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
             const callDelete = new Promise((resolve, reject) => {
                 Manager.AccountManager.Delete($('[name="id"]').val(), resolve)
             });
@@ -82,11 +92,20 @@ function onFilter(isManager = false) {
                 }
             });
         })
-        $('#btnAdd').on('click', () => {
+        $('#btnAdd').click(function (e) {
+            var old_element = document.getElementById("btnAdd");
+            var new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
+            if ($('tbody tr.table-primary')) {
+                $("tbody tr.table-primary").removeClass("table-primary");
+            }
             GeneralManage.setAllFormValue('formData', {});
             $('#btnDelete').prop('disabled', true);
         })
-        $('#btnSave').on('click', () => {
+        $('#btnSave').click(function (e) {
+            var old_element = document.getElementById("btnSave");
+            var new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
             const callSave = new Promise((resolve, reject) => {
                 if ($('[name="id"]').val()) {
                     Manager.AccountManager.Update(GeneralManage.getAllFormValue('formData'), resolve)

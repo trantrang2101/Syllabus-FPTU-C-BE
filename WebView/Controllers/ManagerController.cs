@@ -42,5 +42,9 @@ namespace WebView.Controllers
         {
             return View();
         }
+        public IActionResult Role()
+        {
+            return View();
+        }
     }
 }

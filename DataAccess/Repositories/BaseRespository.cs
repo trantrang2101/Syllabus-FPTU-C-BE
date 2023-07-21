@@ -3,6 +3,7 @@ using AutoMapper.Execution;
 using BusinessObject.Models;
 using DataAccess.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace DataAccess.Repositories
 {
@@ -18,7 +19,25 @@ namespace DataAccess.Repositories
             _mapper = mapper;
             table = _context.Set<B>();
         }
+        public static void SetObjectsToNull(object obj)
+        {
+            if (obj == null)
+                return;
 
+            Type type = obj.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
+                {
+                    // Set properties of class types to null
+                    object value = property.GetValue(obj);
+                    SetObjectsToNull(value);
+                    property.SetValue(obj, null);
+                }
+            }
+        }
 
         public virtual D Add(D dto)
         {
@@ -27,6 +46,7 @@ namespace DataAccess.Repositories
                 throw new Exception("Chưa truyền giá trị vào");
             }
             B basic = _mapper.Map<B>(dto);
+            SetObjectsToNull(basic);
             B saveBasic = table.Add(basic).Entity;
             _context.SaveChanges();
             return Get(saveBasic.Id);
@@ -69,6 +89,7 @@ namespace DataAccess.Repositories
             }
             B valueChanges = _mapper.Map<B>(dto);
             basic = _mapper.Map<B>(dto);
+            SetObjectsToNull(basic);
             _context.Entry(basic).CurrentValues.SetValues(valueChanges);
             var changes = _context.SaveChanges();
             Console.WriteLine(changes);
