@@ -4,7 +4,7 @@
     }
     if (window.location.href.toLowerCase().includes("account/list")) {
         onFilter();
-        $("#codeFilter,#nameFilter").keyup(function (event) {
+        $("#codeFilter,#nameFilter,,#emailFilter").keyup(function (event) {
             if (event.keyCode === 13) {
                 onFilter();
             }

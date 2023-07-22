@@ -61,5 +61,15 @@ namespace WebView.Controllers
         {
             return View();
         }
+
+        public IActionResult Department()
+        {
+            return View();
+        }
+
+        public IActionResult Major()
+        {
+            return View();
+        }
     }
 }

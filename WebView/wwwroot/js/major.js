@@ -1,29 +1,32 @@
 ﻿$(document).ready(() => {
-    if (window.location.href.toLowerCase().includes("manager/category")) {
+    if (window.location.href.toLowerCase().includes("manager/major")) {
         onFilter(true);
     }
-    if (window.location.href.toLowerCase().includes("category/list")) {
+    if (window.location.href.toLowerCase().includes("major/list")) {
         onFilter();
-        $(#nameFilter").keyup(function (event) {
+        $("#codeFilter,#nameFilter").keyup(function (event) {
             if (event.keyCode === 13) {
                 onFilter();
             }
         });
     }
-    if (window.location.href.toLowerCase().includes("Category/Detail")) {
-        if (localStorage.getItem("detail")) {
-            const category = JSON.parse(localStorage.getItem("detail"));
-            console.log(category)
-            $(".page-header-title span").innerHTML = category.name;
-            //$(".page-header-subtitle").innerHTML = category.description;
-            localStorage.removeItem("detail");
-        } else {
-            window.history.back();
-        }
+    if (window.location.href.toLowerCase().includes("major/detail")) {
+        console.log(GeneralManage.getParameterByName("id"));
+        const callDetail = new Promise((resolve, reject) => {
+            Manager.MajorManager.Detail(GeneralManage.getParameterByName("id"), resolve);
+        })
+        callDetail.then((resp) => {
+            if (resp.code == "00") {
+                GeneralManage.setAllFormValue("majorDetail", resp.data, false);
+            }
+        })
     }
 });
 function getFilter() {
     const filter = [];
+    if ($("#codeFilter") && $("#codeFilter").val() && $("#codeFilter").val().trim()) {
+        filter.push(`contains(code,'${$("#codeFilter").val()}')`)
+    }
     if ($("#nameFilter") && $("#nameFilter").val() && $("#nameFilter").val().trim()) {
         filter.push(`contains(name,'${$("#nameFilter").val()}')`)
     }
@@ -31,11 +34,11 @@ function getFilter() {
 }
 function callListAPI(page, itemsPerPage, isManager) {
     const callAPI = new Promise((resolve, reject) => {
-        Manager.CategoryManager.GetAllList(page, itemsPerPage, getFilter(), resolve)
+        Manager.MajorManager.GetAllList(page, itemsPerPage, getFilter(), resolve)
     });
     callAPI.then((response) => {
         if (response && response.code == "00") {
-            GeneralManage.createTable(response.data.content, ["name"], page, itemsPerPage, "tableList", onSelect);
+            GeneralManage.createTable(response.data.content, ["code", "name"], page, itemsPerPage, "tableList", onSelect);
             GeneralManage.createPagination(page, response.data.totalCount, itemsPerPage, "tableList", onChangePage);
 
             function onChangePage(item) {
@@ -51,7 +54,7 @@ function callListAPI(page, itemsPerPage, isManager) {
                     $(`.row-${item.id}`).addClass('table-primary');
                 }
                 const callDetail = new Promise((resolve, reject) => {
-                    Manager.CategoryManager.Detail(item.id, resolve);
+                    Manager.MajorManager.Detail(item.id, resolve);
                 })
                 callDetail.then((resp) => {
                     if (resp.code == "00") {
@@ -59,8 +62,18 @@ function callListAPI(page, itemsPerPage, isManager) {
                             $('#btnDelete').prop('disabled', false);
                             GeneralManage.setAllFormValue("formData", resp.data);
                         } else {
-                            localStorage.setItem("detail", JSON.stringify(resp.data));
-                            window.location.href = "/Category/Detail"
+                            $.ajax({
+                                url: '/Major/SetSessionData',
+                                type: 'POST',
+                                data: { key: "Detail", value: JSON.stringify(resp.data) },
+                                success: function (data) {
+                                    window.location.href = "/Major/Detail?id=" + resp.data.id
+                                },
+                                error: function (xhr, status, error) {
+                                    // Handle error if needed
+                                    console.error("Error setting session data:", error);
+                                }
+                            });
                         }
                     }
                 })
@@ -71,6 +84,7 @@ function callListAPI(page, itemsPerPage, isManager) {
 function onFilter(isManager = false) {
     var page = 0, itemsPerPage = 20;
     if (isManager) {
+        GeneralManage.createEditor('description');
         $('#btnDelete').prop('disabled', true);
         $('#btnDelete').click(function (e) {
             var old_element = document.getElementById("btnDelete");
@@ -81,7 +95,7 @@ function onFilter(isManager = false) {
         })
         $('#btnDeleteConfirm').on('click', () => {
             const callDelete = new Promise((resolve, reject) => {
-                Manager.CategoryManager.Delete($('[name="id"]').val(), resolve)
+                Manager.MajorManager.Delete($('[name="id"]').val(), resolve)
             });
             callDelete.then((response) => {
                 if (response && response.code == "00") {
@@ -107,10 +121,9 @@ function onFilter(isManager = false) {
             old_element.parentNode.replaceChild(new_element, old_element);
             const callSave = new Promise((resolve, reject) => {
                 if ($('[name="id"]').val()) {
-                    Manager.CategoryManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
+                    Manager.MajorManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
                 } else {
-                    console.log(GeneralManage.getAllFormValue('formData'));
-                    Manager.CategoryManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
+                    Manager.MajorManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
                 }
             });
             callSave.then((response) => {
@@ -119,6 +132,7 @@ function onFilter(isManager = false) {
                 }
             });
         });
+
         GeneralManage.createSelect([{ id: 1, name: "Kích hoạt" }, { id: 0, name: "Đóng" }], "id", "name", "status");
     }
 

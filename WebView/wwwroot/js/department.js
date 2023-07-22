@@ -1,21 +1,21 @@
 ﻿$(document).ready(() => {
-    if (window.location.href.toLowerCase().includes("manager/category")) {
+    if (window.location.href.toLowerCase().includes("manager/department")) {
         onFilter(true);
     }
-    if (window.location.href.toLowerCase().includes("category/list")) {
+    if (window.location.href.toLowerCase().includes("department/list")) {
         onFilter();
-        $(#nameFilter").keyup(function (event) {
+        $("#codeFilter,#nameFilter").keyup(function (event) {
             if (event.keyCode === 13) {
                 onFilter();
             }
         });
     }
-    if (window.location.href.toLowerCase().includes("Category/Detail")) {
+    if (window.location.href.toLowerCase().includes("Department/Detail")) {
         if (localStorage.getItem("detail")) {
-            const category = JSON.parse(localStorage.getItem("detail"));
-            console.log(category)
-            $(".page-header-title span").innerHTML = category.name;
-            //$(".page-header-subtitle").innerHTML = category.description;
+            const department = JSON.parse(localStorage.getItem("detail"));
+            console.log(department)
+            $(".page-header-title span").innerHTML = department.name;
+            //$(".page-header-subtitle").innerHTML = department.description;
             localStorage.removeItem("detail");
         } else {
             window.history.back();
@@ -31,7 +31,7 @@ function getFilter() {
 }
 function callListAPI(page, itemsPerPage, isManager) {
     const callAPI = new Promise((resolve, reject) => {
-        Manager.CategoryManager.GetAllList(page, itemsPerPage, getFilter(), resolve)
+        Manager.DepartmentManager.GetAllList(page, itemsPerPage, getFilter(), resolve)
     });
     callAPI.then((response) => {
         if (response && response.code == "00") {
@@ -51,7 +51,7 @@ function callListAPI(page, itemsPerPage, isManager) {
                     $(`.row-${item.id}`).addClass('table-primary');
                 }
                 const callDetail = new Promise((resolve, reject) => {
-                    Manager.CategoryManager.Detail(item.id, resolve);
+                    Manager.DepartmentManager.Detail(item.id, resolve);
                 })
                 callDetail.then((resp) => {
                     if (resp.code == "00") {
@@ -60,7 +60,7 @@ function callListAPI(page, itemsPerPage, isManager) {
                             GeneralManage.setAllFormValue("formData", resp.data);
                         } else {
                             localStorage.setItem("detail", JSON.stringify(resp.data));
-                            window.location.href = "/Category/Detail"
+                            window.location.href = "/Department/Detail"
                         }
                     }
                 })
@@ -81,7 +81,7 @@ function onFilter(isManager = false) {
         })
         $('#btnDeleteConfirm').on('click', () => {
             const callDelete = new Promise((resolve, reject) => {
-                Manager.CategoryManager.Delete($('[name="id"]').val(), resolve)
+                Manager.DepartmentManager.Delete($('[name="id"]').val(), resolve)
             });
             callDelete.then((response) => {
                 if (response && response.code == "00") {
@@ -107,10 +107,10 @@ function onFilter(isManager = false) {
             old_element.parentNode.replaceChild(new_element, old_element);
             const callSave = new Promise((resolve, reject) => {
                 if ($('[name="id"]').val()) {
-                    Manager.CategoryManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
+                    Manager.DepartmentManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
                 } else {
                     console.log(GeneralManage.getAllFormValue('formData'));
-                    Manager.CategoryManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
+                    Manager.DepartmentManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
                 }
             });
             callSave.then((response) => {

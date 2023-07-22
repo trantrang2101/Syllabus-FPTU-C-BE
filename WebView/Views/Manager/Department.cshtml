@@ -1,0 +1,90 @@
+﻿@{
+
+    ViewData["Title"] = "Phòng ban";
+    ViewData["Icon"] = "fa-solid fa-list-check";
+}
+
+<div class="container-fluid px-5 mt-n10">
+    <div class="row">
+        <div class="col-6 col-lg-4 animated--fade-in-up ">
+            <div class="card mb-4 mb-xl-0 overflow-auto" id="tableList">
+                <div class="card-body m-3 p-0 table-responsive boxscroll overflow-auto">
+                    <table class="table table-fixed">
+                        <thead class="">
+                            <tr class="text-center">
+                                <th>STT</th>
+                                <th>Tên</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="text" id="nameFilter" class="form-control"
+                                           placeholder="Tìm kiếm" />
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-transparent d-flex align-items-end justify-content-end">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-8 h-100 animated--fade-in-up">
+            <div class="card mb-3 card-detail">
+                <div class="card-header bg-transparent">Chi tiết</div>
+                <div class="card-body m-3 p-0 boxscroll overflow-auto">
+                    <form id="formData" class="d-flex justify-content-start align-items-start flex-column">
+                        <input type="number" class="form-control d-none" name="id">
+                        <div class="col-12">
+                            <label for="name" class="form-label">Tên</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Tên phòng ban">
+                        </div>
+                        <div class="col-12">
+                            <label for="status" class="form-label">Trạng thái</label>
+                            <select class="form-select" name="status" id="status"></select>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-transparent d-flex align-items-center justify-content-end" style="column-gap:1rem;">
+                    <button type="button" class="btn btn-outline-primary" id="btnAdd">
+                        <i class="me-2 fa-solid fa-plus"></i> Thêm
+                    </button>
+                    <button type="button" class="btn btn-outline-success" id="btnSave">
+                        <i class="me-2 fa-solid fa-floppy-disk"></i> Lưu
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" id="btnDelete">
+                        <i class="me-2 fa-solid fa-trash"></i> Xóa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="deleteConfirmModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa dữ liệu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn xóa?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="btnDeleteConfirm">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/department.js"></script>
+}

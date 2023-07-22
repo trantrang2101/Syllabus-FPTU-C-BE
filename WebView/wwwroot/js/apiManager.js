@@ -568,6 +568,41 @@ var Manager = {
             function onSuccess(response) {
                 resolve(response)
             }
+        },
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/Major/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Major/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Major/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/Major/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
         }
     },
     AccountManager: {
@@ -840,6 +875,52 @@ var Manager = {
 
         Delete: (id, resolve) => {
             const url = `https://localhost:7124/api/Course/Delete/${id}`;
+            APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
+    },
+    DepartmentManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/Department/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/Department/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Update: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Department/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Add: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/Department/Add`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
+
+        Delete: (id, resolve) => {
+            const url = `https://localhost:7124/api/Department/Delete/${id}`;
             APIManager.DeleteAPI(url, onSuccess);
 
             function onSuccess(response) {
