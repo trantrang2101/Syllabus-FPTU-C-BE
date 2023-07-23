@@ -4,7 +4,7 @@
     }
     if (window.location.href.toLowerCase().includes("category/list")) {
         onFilter();
-        $(#nameFilter").keyup(function (event) {
+        $("#nameFilter").keyup(function (event) {
             if (event.keyCode === 13) {
                 onFilter();
             }

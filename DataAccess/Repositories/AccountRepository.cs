@@ -33,9 +33,29 @@ namespace DataAccess.Repositories
             return account;
         }
 
+        public override AccountDTO Add(AccountDTO dto)
+        {
+            if (dto == null)
+            {
+                throw new Exception("Chưa truyền giá trị vào");
+            }
+            Account basic = _mapper.Map<Account>(dto);
+            basic.AccountRoles = new List<AccountRole>();
+            foreach (var item in dto.Roles)
+            {
+                basic.AccountRoles.Add(new AccountRole()
+                {
+                    RoleId = item.Id,
+                });
+            }
+            Account saveBasic = table.Add(basic).Entity;
+            _context.SaveChanges();
+            return Get(saveBasic.Id);
+        }
+
         public override List<AccountDTO> GetAll()
         {
-            List<Account> products = table.Include("AccountRoles.Role.RoleSidebars.Sidebar").ToList();
+            List<Account> products = table.Include("AccountRoles.Role").ToList();
             List<AccountDTO> dto = new List<AccountDTO>() { };
             if (products != null && products.Count() > 0)
             {
@@ -46,7 +66,7 @@ namespace DataAccess.Repositories
 
         public override AccountDTO Get(long id)
         {
-            Account basic = table.Include("AccountRoles.Role.RoleSidebars.Sidebar").FirstOrDefault(x=>x.Id==id);
+            Account basic = table.Include("AccountRoles.Role").FirstOrDefault(x=>x.Id==id);
             if (basic == null || basic.Status == 0)
             {
                 throw new Exception("Không tìm thấy hoặc đã bị xóa");

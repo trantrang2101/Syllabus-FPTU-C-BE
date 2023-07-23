@@ -1,6 +1,21 @@
 ﻿const editors = new Map();
 
 var APIManager = {
+    ErrorCatch: (jqXHR, textStatus, errorThrown) =>{
+        // Check for the 401 Unauthorized status code
+        if (jqXHR.status === 401) {
+            console.log('Unauthorized: You need to log in or provide valid credentials.');
+            localStorage.clear();
+            window.location.href = '/Login';
+        } else if (jqXHR.status === 404) {
+            console.log('Resource not found.');
+        } else if (jqXHR.status === 500) {
+            console.log('Internal server error.');
+        } else {
+            // Handle other errors
+            console.log('Error:', errorThrown);
+        }
+    },
     GetAPI: function (serviceUrl, successCallback) {
         $.ajax({
             type: "GET",
@@ -10,9 +25,7 @@ var APIManager = {
             },
             contentType: "application/json",
             success: successCallback,
-            error: function (xhr, status, err) {
-                console.error(serviceUrl, status, err.toString());
-            }
+            error: APIManager.ErrorCatch
         });
     },
     PostAPI: function (serviceUrl, data, successCallback) {
@@ -25,9 +38,7 @@ var APIManager = {
             contentType: "application/json",
             data: JSON.stringify(data),
             success: successCallback,
-            error: function (xhr, status, err) {
-                console.error(serviceUrl, status, err.toString());
-            }
+            error: APIManager.ErrorCatch
         });
     },
     PutAPI: function (serviceUrl, data, successCallback) {
@@ -40,9 +51,7 @@ var APIManager = {
             contentType: "application/json",
             data: JSON.stringify(data),
             success: successCallback,
-            error: function (xhr, status, err) {
-                console.error(serviceUrl, status, err.toString());
-            }
+            error: APIManager.ErrorCatch
         });
     },
     DeleteAPI: function (serviceUrl, successCallback) {
@@ -53,9 +62,7 @@ var APIManager = {
                 Authorization: 'Bearer ' + localStorage.getItem('authenticationToken')
             },
             success: successCallback,
-            error: function (xhr, status, err) {
-                console.error(serviceUrl, status, err.toString());
-            }
+            error: APIManager.ErrorCatch
         });
     }
 };
@@ -64,7 +71,6 @@ var GeneralManage = {
         if (arr && arr.length > 0) {
             let result = [];
             const list = arr.filter((x) => (x[parentProperty] ? x[parentProperty].id : 0) === parentId);
-            console.log(list);
             if (list.length > 0) {
                 for (let item of list) {
                     let children = GeneralManage.buildNested(arr, item.id, parentProperty);
@@ -90,7 +96,6 @@ var GeneralManage = {
             .catch(err => console.error(err.stack));
     },
     setAllFormValue: (formId, object, isSetHeight = true) => {
-        console.log(object)
         $(`#${formId} [name]`).each(function () {
             if ($(this) && $(this).attr("name") && $(this).attr("name").length > 0) {
                 const value = GeneralManage.ObjectByString(object, $(this).attr("name"));
@@ -103,7 +108,7 @@ var GeneralManage = {
                 } else if ($(this).is('[type="checkbox"]') || $(this).is('[type="radio"]')) {
                     if (value !== null && value !== undefined && typeof value === 'object' && Array.isArray(value)) {
                         value.forEach(val => {
-                           $(this).prop("checked", $(this).val()==val);
+                            $(this).prop("checked", JSON.stringify($(this).data('value')) == JSON.stringify(val));
                         })
                     } else {
                         $(this).prop("checked", false);
@@ -127,8 +132,9 @@ var GeneralManage = {
                 else if ($(this).attr('type') === 'date' || $(this).hasClass("datepicker"))
                     (GeneralManage.StringToObject(fieldPair, $(this).attr("name"), $(this).val()));
                 else if ($(this).attr('type') === 'checkbox' || ($(this).attr('type') === 'radio')) {
-                    if ($(this).is(':checked'))
-                        GeneralManage.StringToObject(fieldPair, $(this).attr("name"), parseFloat($(this).val()) ? parseFloat($(this).val()) : $(this).val());
+                    if ($(this).is(':checked')) {
+                        GeneralManage.StringToObject(fieldPair, $(this).attr("name"), $(this).data('value'));
+                    }
                 }
                 else 
                     GeneralManage.StringToObject(fieldPair, $(this).attr("name"), parseFloat($(this).val()) ? parseFloat($(this).val()) : $(this).val());
@@ -164,6 +170,9 @@ var GeneralManage = {
         return result;
     },
     ObjectByString: (o, s) => {
+        if (s === "*") {
+            return JSON.stringify(o);
+        }
         s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
         s = s.replace(/^\./, '');           // strip a leading dot
         var a = s.split('.');
@@ -199,7 +208,7 @@ var GeneralManage = {
             select.innerHTML = '<option>Không tìm thấy</option>'
         }
     },
-    createTable: (list, listObjectKey, page, itemsPerPage, idName, onClickRow, stringsFormat =[],isStt=true) => {
+    createTable: (list, listObjectKey, page, itemsPerPage, idName, onClickRow, stringsFormat = [], isStt = true) => {
         const divContainer = document.getElementById(idName);
         const tBody = divContainer.querySelector(`#${idName} table tbody`);
         tBody.innerHTML = ""
@@ -680,7 +689,6 @@ var Manager = {
             APIManager.GetAPI(url, onSuccess);
 
             function onSuccess(response) {
-                console.log(response);
                 resolve(response)
             }
         },

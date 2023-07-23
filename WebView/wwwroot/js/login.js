@@ -1,7 +1,6 @@
 function onSignIn(response) {
     var tokens = response.credential.split(".");
     var payload = JSON.parse(atob(tokens[1]));
-    console.log(payload)
     LoginManager.Login(payload)
 }
 var LoginManager = {
@@ -12,7 +11,8 @@ var LoginManager = {
         function onSuccess(response) {
             if (response.code == "00") {
                 console.log(response.data);
-                localStorage.setItem('sidebars', JSON.stringify([...new Set(GeneralManage.buildNested(response.data.sidebars.map((x) => ({ ...x, children: [] }))))]));
+                const filterList = [...new Set(response.data.sidebars.map(JSON.stringify))].map(JSON.parse);
+                localStorage.setItem('sidebars', JSON.stringify([...new Set(GeneralManage.buildNested(filterList.map((x) => ({ ...x, children: [] }))))]));
                 localStorage.setItem('user', JSON.stringify(response.data));
                 localStorage.setItem('info', JSON.stringify(googleUser));
                 localStorage.setItem('authenticationToken', response.data.token);

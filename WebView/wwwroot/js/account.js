@@ -64,7 +64,7 @@ function callListAPI(page, itemsPerPage, isManager) {
                     if (resp.code == "00") {
                         if (isManager) {
                             $('#btnDelete').prop('disabled', false);
-                            GeneralManage.setAllFormValue("formData", { ...resp.data, roles: resp.data.roles.map(value => value.id) });
+                            GeneralManage.setAllFormValue("formData", resp.data);
                         } else {
                             localStorage.setItem("detail", JSON.stringify(resp.data));
                             window.location.href = "/Account/Detail"
@@ -130,7 +130,7 @@ function onFilter(isManager = false) {
         });
         callRoles.then((response) => {
             if (response && response.code == "00") {
-                GeneralManage.createTable(response.data.content, ["id", "code", "name"], 0, 1000000, "roleList", null, [`<input type='checkbox' name='roles' value='[0]'>`], false);
+                GeneralManage.createTable(response.data.content.map(role => ({ ...role, sidebars: [] })), ["*", "code", "name"], 0, 1000000, "roleList", null, [`<input type='checkbox' name='roles' data-value='[0]'>`], false);
             }
         });
         GeneralManage.createSelect([{ id: 1, name: "Kích hoạt" }, { id: 0, name: "Đóng" }], "id", "name", "status");
