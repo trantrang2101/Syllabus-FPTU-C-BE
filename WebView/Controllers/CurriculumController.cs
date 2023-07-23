@@ -28,12 +28,8 @@ namespace WebView.Controllers
                 ViewData["SubTitle"] = value.Name;
                 ViewData["Icon"] = "fa-solid fa-book-bookmark";
                 HttpContext.Session.Remove("Detail");
-                return View();
             }
-            else
-            {
-                return RedirectToAction("List", "Curriculum");
-            }
+            return View();
         }
         public IActionResult List()
         {

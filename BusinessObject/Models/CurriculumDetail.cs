@@ -14,6 +14,7 @@ namespace BusinessObject.Models
         public long? CurriculumId { get; set; }
         public long? SubjectId { get; set; }
         public int MinMark { get; set; }
+        public int Credit { get; set; }
 
         public virtual Curriculum? Curriculum { get; set; }
         public virtual Subject? Subject { get; set; }

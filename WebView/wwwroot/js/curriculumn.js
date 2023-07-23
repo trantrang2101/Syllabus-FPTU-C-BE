@@ -1,23 +1,37 @@
 ﻿$(document).ready(() => {
     if (window.location.href.toLowerCase().includes("manager/curriculum")) {
         onFilter(true);
-    }
-    if (window.location.href.toLowerCase().includes("curriculum/list")) {
+    }else if (window.location.href.toLowerCase().includes("curriculum/list")) {
         onFilter();
         $("#codeFilter,#nameFilter").keyup(function (event) {
             if (event.keyCode === 13) {
                 onFilter();
             }
         });
-    }
-    if (window.location.href.toLowerCase().includes("curriculum/detail")) {
+    }else if (window.location.href.toLowerCase().includes("curriculum/detail")) {
         console.log(GeneralManage.getParameterByName("id"));
         const callDetail = new Promise((resolve, reject) => {
             Manager.CurriculumManager.Detail(GeneralManage.getParameterByName("id"), resolve);
         })
         callDetail.then((resp) => {
             if (resp.code == "00") {
-                GeneralManage.setAllFormValue("curriculumDetail", resp.data,false);
+                if ($('.page-header-subtitle') && $('.page-header-subtitle').length>0) {
+                    GeneralManage.setAllFormValue("curriculumDetail", resp.data, false);
+                    GeneralManage.createTable([...resp.data.curriculumDetails, ...resp.data.comboCurricula.map(x => ({ ...x, subject: x.combo }))].sort((a, b) => a.semester - b.semester), ["semester", "subject.code", "subject.name","credit"], 0, 10000000, "detailList", null);
+                } else {
+                    $.ajax({
+                        url: '/Curriculum/SetSessionData',
+                        type: 'POST',
+                        data: { key: "Detail", value: JSON.stringify(resp.data) },
+                        success: function (data) {
+                            window.location.href = "/Curriculum/Detail?id=" + resp.data.id
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle error if needed
+                            console.error("Error setting session data:", error);
+                        }
+                    });
+                }
             }
         })
     }

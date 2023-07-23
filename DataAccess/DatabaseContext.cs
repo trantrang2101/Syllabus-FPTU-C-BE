@@ -98,13 +98,13 @@ namespace DataAccess
                     .WithMany(p => p.AccountRoles)
                     .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__account_r__accou__59FA5E80");
+                    .HasConstraintName("FK__account_r__accou__245D67DE");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AccountRoles)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__account_r__role___59063A47");
+                    .HasConstraintName("FK__account_r__role___25518C17");
             });
 
             modelBuilder.Entity<Assessment>(entity =>
@@ -127,7 +127,7 @@ namespace DataAccess
                     .WithMany(p => p.Assessments)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__assessmen__categ__2B3F6F97");
+                    .HasConstraintName("FK__assessmen__categ__2645B050");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -189,31 +189,37 @@ namespace DataAccess
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Code).HasColumnName("code");
+
+                entity.Property(e => e.Name).HasColumnName("name");
+
+                entity.Property(e => e.Credit).HasColumnName("credit");
+
                 entity.Property(e => e.ComboId).HasColumnName("combo_id");
 
                 entity.Property(e => e.CurriculumId).HasColumnName("curriculum_id");
 
                 entity.Property(e => e.Description).HasColumnName("description");
 
-                entity.Property(e => e.Status)
-                    .HasColumnName("status")
+                entity.Property(e => e.Semester)
+                    .HasColumnName("semester")
                     .HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.TermStatus)
-                    .HasColumnName("term_status")
+                entity.Property(e => e.Status)
+                    .HasColumnName("status")
                     .HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Combo)
                     .WithMany(p => p.ComboCurricula)
                     .HasForeignKey(d => d.ComboId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__combo_cur__combo__3E1D39E1");
+                    .HasConstraintName("FK__combo_cur__combo__2739D489");
 
                 entity.HasOne(d => d.Curriculum)
                     .WithMany(p => p.ComboCurricula)
                     .HasForeignKey(d => d.CurriculumId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__combo_cur__curri__3F115E1A");
+                    .HasConstraintName("FK__combo_cur__curri__282DF8C2");
             });
 
             modelBuilder.Entity<ComboDetail>(entity =>
@@ -238,17 +244,17 @@ namespace DataAccess
                     .WithMany(p => p.ComboDetails)
                     .HasForeignKey(d => d.ComboId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__combo_det__combo__3493CFA7");
+                    .HasConstraintName("FK__combo_det__combo__29221CFB");
 
                 entity.HasOne(d => d.ReplaceSubject)
                     .WithMany(p => p.ComboDetailReplaceSubjects)
                     .HasForeignKey(d => d.ReplaceSubjectId)
-                    .HasConstraintName("FK__combo_det__repla__3587F3E0");
+                    .HasConstraintName("FK__combo_det__repla__2A164134");
 
                 entity.HasOne(d => d.Subject)
                     .WithMany(p => p.ComboDetailSubjects)
                     .HasForeignKey(d => d.SubjectId)
-                    .HasConstraintName("FK__combo_det__subje__367C1819");
+                    .HasConstraintName("FK__combo_det__subje__2B0A656D");
             });
 
             modelBuilder.Entity<Course>(entity =>
@@ -273,25 +279,25 @@ namespace DataAccess
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.ClassId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__course__class_id__68487DD7");
+                    .HasConstraintName("FK__course__class_id__2BFE89A6");
 
                 entity.HasOne(d => d.Subject)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.SubjectId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__course__subject___693CA210");
+                    .HasConstraintName("FK__course__subject___2CF2ADDF");
 
                 entity.HasOne(d => d.Teacher)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.TeacherId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__course__teacher___6A30C649");
+                    .HasConstraintName("FK__course__teacher___2DE6D218");
 
                 entity.HasOne(d => d.Term)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.TermId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__course__term_id__6B24EA82");
+                    .HasConstraintName("FK__course__term_id__2EDAF651");
             });
 
             modelBuilder.Entity<Curriculum>(entity =>
@@ -320,7 +326,7 @@ namespace DataAccess
                     .WithMany(p => p.Curricula)
                     .HasForeignKey(d => d.MajorId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__curriculu__major__7A672E12");
+                    .HasConstraintName("FK__curriculu__major__2FCF1A8A");
             });
 
             modelBuilder.Entity<CurriculumDetail>(entity =>
@@ -328,6 +334,8 @@ namespace DataAccess
                 entity.ToTable("curriculum_detail");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Credit).HasColumnName("credit");
 
                 entity.Property(e => e.CurriculumId).HasColumnName("curriculum_id");
 
@@ -347,13 +355,13 @@ namespace DataAccess
                     .WithMany(p => p.CurriculumDetails)
                     .HasForeignKey(d => d.CurriculumId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__curriculu__curri__01142BA1");
+                    .HasConstraintName("FK__curriculu__curri__30C33EC3");
 
                 entity.HasOne(d => d.Subject)
                     .WithMany(p => p.CurriculumDetails)
                     .HasForeignKey(d => d.SubjectId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__curriculu__subje__02084FDA");
+                    .HasConstraintName("FK__curriculu__subje__31B762FC");
             });
 
             modelBuilder.Entity<Department>(entity =>
@@ -404,13 +412,13 @@ namespace DataAccess
                     .WithMany(p => p.GradeDetails)
                     .HasForeignKey(d => d.GradeGeneralId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__grade_det__grade__1CBC4616");
+                    .HasConstraintName("FK__grade_det__grade__32AB8735");
 
                 entity.HasOne(d => d.StudentCourse)
                     .WithMany(p => p.GradeDetails)
                     .HasForeignKey(d => d.StudentCourseId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__grade_det__stude__1BC821DD");
+                    .HasConstraintName("FK__grade_det__stude__339FAB6E");
             });
 
             modelBuilder.Entity<GradeGeneral>(entity =>
@@ -437,13 +445,13 @@ namespace DataAccess
                     .WithMany(p => p.GradeGenerals)
                     .HasForeignKey(d => d.AssessmentId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__grade_gen__asses__123EB7A3");
+                    .HasConstraintName("FK__grade_gen__asses__3493CFA7");
 
                 entity.HasOne(d => d.CurriculumDetail)
                     .WithMany(p => p.GradeGenerals)
                     .HasForeignKey(d => d.CurriculumDetailId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__grade_gen__curri__114A936A");
+                    .HasConstraintName("FK__grade_gen__curri__3587F3E0");
             });
 
             modelBuilder.Entity<Major>(entity =>
@@ -471,7 +479,7 @@ namespace DataAccess
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK__major__parent_id__72C60C4A");
+                    .HasConstraintName("FK__major__parent_id__367C1819");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -513,13 +521,13 @@ namespace DataAccess
                     .WithMany(p => p.RoleSidebars)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__role_side__role___69FBBC1F");
+                    .HasConstraintName("FK__role_side__role___44CA3770");
 
                 entity.HasOne(d => d.Sidebar)
                     .WithMany(p => p.RoleSidebars)
                     .HasForeignKey(d => d.SidebarId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__role_side__sideb__6AEFE058");
+                    .HasConstraintName("FK__role_side__sideb__45BE5BA9");
             });
 
             modelBuilder.Entity<Sidebar>(entity =>
@@ -551,7 +559,7 @@ namespace DataAccess
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK__sidebar__parent___5D95E53A");
+                    .HasConstraintName("FK__sidebar__parent___395884C4");
             });
 
             modelBuilder.Entity<StudentCourse>(entity =>
@@ -576,13 +584,13 @@ namespace DataAccess
                     .WithMany(p => p.StudentCourses)
                     .HasForeignKey(d => d.CourseId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__student_c__cours__08B54D69");
+                    .HasConstraintName("FK__student_c__cours__3A4CA8FD");
 
                 entity.HasOne(d => d.Student)
                     .WithMany(p => p.StudentCourses)
                     .HasForeignKey(d => d.StudentId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__student_c__stude__09A971A2");
+                    .HasConstraintName("FK__student_c__stude__3B40CD36");
             });
 
             modelBuilder.Entity<StudentProgress>(entity =>
@@ -615,19 +623,19 @@ namespace DataAccess
                     .WithMany(p => p.StudentProgresses)
                     .HasForeignKey(d => d.CurriculumId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__student_p__curri__2739D489");
+                    .HasConstraintName("FK__student_p__curri__3C34F16F");
 
                 entity.HasOne(d => d.Student)
                     .WithMany(p => p.StudentProgresses)
                     .HasForeignKey(d => d.StudentId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__student_p__stude__2645B050");
+                    .HasConstraintName("FK__student_p__stude__3D2915A8");
 
                 entity.HasOne(d => d.Term)
                     .WithMany(p => p.StudentProgresses)
                     .HasForeignKey(d => d.TermId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__student_p__term___25518C17");
+                    .HasConstraintName("FK__student_p__term___3E1D39E1");
             });
 
             modelBuilder.Entity<Subject>(entity =>
@@ -639,8 +647,6 @@ namespace DataAccess
                 entity.Property(e => e.Code)
                     .HasMaxLength(255)
                     .HasColumnName("code");
-
-                entity.Property(e => e.Credit).HasColumnName("credit");
 
                 entity.Property(e => e.DepartmentId).HasColumnName("department_id");
 
@@ -658,7 +664,7 @@ namespace DataAccess
                     .WithMany(p => p.Subjects)
                     .HasForeignKey(d => d.DepartmentId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__subject__departm__3A81B327");
+                    .HasConstraintName("FK__subject__departm__3F115E1A");
             });
 
             modelBuilder.Entity<Term>(entity =>

@@ -11,6 +11,7 @@ namespace DataAccess.DTO
     {
         public int Semester { get; set; }
         public int MinMark { get; set; }
+        public int Credit { get; set; }
 
         public virtual CurriculumDTO? Curriculum { get; set; }
         public virtual SubjectDTO? Subject { get; set; }

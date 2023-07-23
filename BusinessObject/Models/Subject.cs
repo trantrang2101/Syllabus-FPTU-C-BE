@@ -14,7 +14,6 @@ namespace BusinessObject.Models
         }
 
         public string? Code { get; set; }
-        public int Credit { get; set; }
         public string? Name { get; set; }
         public int Slot { get; set; }
         public long? DepartmentId { get; set; }
