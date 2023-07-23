@@ -89,7 +89,8 @@ var GeneralManage = {
             })
             .catch(err => console.error(err.stack));
     },
-    setAllFormValue: (formId, object,isSetHeight=true) => {
+    setAllFormValue: (formId, object, isSetHeight = true) => {
+        console.log(object)
         $(`#${formId} [name]`).each(function () {
             if ($(this) && $(this).attr("name") && $(this).attr("name").length > 0) {
                 const value = GeneralManage.ObjectByString(object, $(this).attr("name"));
@@ -99,6 +100,14 @@ var GeneralManage = {
                     $(this).html(value !== null && value !== undefined ? value : $(this).first().val()).change();;
                 } else if ($(this).is('select')) {
                     $(this).val(value !== null && value !== undefined ? value : $(this).first().val()).change();;
+                } else if ($(this).is('[type="checkbox"]') || $(this).is('[type="radio"]')) {
+                    if (value !== null && value !== undefined && typeof value === 'object' && Array.isArray(value)) {
+                        value.forEach(val => {
+                           $(this).prop("checked", $(this).val()==val);
+                        })
+                    } else {
+                        $(this).prop("checked", false);
+                    }
                 } else {
                     const value = GeneralManage.ObjectByString(object, $(this).attr("name"));
                     $(this).val(value !== null && value !== undefined ? value : "").change();;
@@ -117,8 +126,12 @@ var GeneralManage = {
                     (GeneralManage.StringToObject(fieldPair, $(this).attr("name"), editors[$(this).attr("name")].getData()))
                 else if ($(this).attr('type') === 'date' || $(this).hasClass("datepicker"))
                     (GeneralManage.StringToObject(fieldPair, $(this).attr("name"), $(this).val()));
-                else
-                    (GeneralManage.StringToObject(fieldPair, $(this).attr("name"), parseFloat($(this).val()) ? parseFloat($(this).val()) : $(this).val()));
+                else if ($(this).attr('type') === 'checkbox' || ($(this).attr('type') === 'radio')) {
+                    if ($(this).is(':checked'))
+                        GeneralManage.StringToObject(fieldPair, $(this).attr("name"), parseFloat($(this).val()) ? parseFloat($(this).val()) : $(this).val());
+                }
+                else 
+                    GeneralManage.StringToObject(fieldPair, $(this).attr("name"), parseFloat($(this).val()) ? parseFloat($(this).val()) : $(this).val());
             }
         });
         return fieldPair;
@@ -138,8 +151,16 @@ var GeneralManage = {
             nestedObj[nestedKey] = {};
             nestedObj = nestedObj[nestedKey];
         }
-
-        nestedObj[finalKey] = value;
+        if (nestedObj[finalKey]) {
+            if (Array.isArray(nestedObj[finalKey])) {
+                nestedObj[finalKey] = [...nestedObj[finalKey]]
+            } else {
+                nestedObj[finalKey] = [nestedObj[finalKey]]
+            }
+            nestedObj[finalKey].push(value);
+        } else {
+            nestedObj[finalKey] = value;
+        }
         return result;
     },
     ObjectByString: (o, s) => {
@@ -178,7 +199,7 @@ var GeneralManage = {
             select.innerHTML = '<option>Không tìm thấy</option>'
         }
     },
-    createTable: (list, listObjectKey, page, itemsPerPage, idName, onClickRow,stringFormat="",isStt=true) => {
+    createTable: (list, listObjectKey, page, itemsPerPage, idName, onClickRow, stringsFormat =[],isStt=true) => {
         const divContainer = document.getElementById(idName);
         const tBody = divContainer.querySelector(`#${idName} table tbody`);
         tBody.innerHTML = ""
@@ -192,17 +213,19 @@ var GeneralManage = {
                     td.innerHTML = index + 1 + itemsPerPage * page;
                     tr.appendChild(td);
                 }
-                listObjectKey.forEach(key => {
+                listObjectKey.forEach((key,index) => {
                     td = document.createElement("td");
-                    td.innerHTML = stringFormat?stringFormat.replace(/\[\d+\]/g, match => {
+                    td.innerHTML = stringsFormat && stringsFormat[index] ? stringsFormat[index].replace(/\[\d+\]/g, match => {
                         const index = parseInt(match.slice(1, -1));
-                        return GeneralManage.ObjectByString(item, key[index]);
+                        return GeneralManage.ObjectByString(item, key);
                     }) : GeneralManage.ObjectByString(item, key);;
                     tr.appendChild(td);
                 });
-                tr.addEventListener('click', () => {
-                    onClickRow(item)
-                });
+                if (onClickRow) {
+                    tr.addEventListener('click', () => {
+                        onClickRow(item)
+                    });
+                }
                 tBody.appendChild(tr);
             });
         } else {

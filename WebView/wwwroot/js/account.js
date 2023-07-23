@@ -49,12 +49,13 @@ function callListAPI(page, itemsPerPage, isManager) {
             }
 
             function onSelect(item) {
-                if ($('tbody tr.table-primary')) {
-                    $("tbody tr.table-primary").removeClass("table-primary");
+                console.log(item);
+                if ($('#tableList tbody tr.table-primary')) {
+                    $("#tableList tbody tr.table-primary").removeClass("table-primary");
                 }
-                if ($(`.row-${item.id}`)) {
-                    console.log($(`.row-${item.id}`))
-                    $(`.row-${item.id}`).addClass('table-primary');
+                if ($(`#tableList .row-${item.id}`)) {
+                    console.log($(`#tableList .row-${item.id}`))
+                    $(`#tableList .row-${item.id}`).addClass('table-primary');
                 }
                 const callDetail = new Promise((resolve, reject) => {
                     Manager.AccountManager.Detail(item.id, resolve);
@@ -63,7 +64,7 @@ function callListAPI(page, itemsPerPage, isManager) {
                     if (resp.code == "00") {
                         if (isManager) {
                             $('#btnDelete').prop('disabled', false);
-                            GeneralManage.setAllFormValue("formData", resp.data);
+                            GeneralManage.setAllFormValue("formData", { ...resp.data, roles: resp.data.roles.map(value => value.id) });
                         } else {
                             localStorage.setItem("detail", JSON.stringify(resp.data));
                             window.location.href = "/Account/Detail"
@@ -77,7 +78,6 @@ function callListAPI(page, itemsPerPage, isManager) {
 function onFilter(isManager = false) {
     var page = 0, itemsPerPage = 20;
     if (isManager) {
-        GeneralManage.createEditor('description');
         $('#btnDelete').prop('disabled', true);
         $('#btnDelete').click(function (e) {
             var old_element = document.getElementById("btnDelete");
@@ -124,6 +124,14 @@ function onFilter(isManager = false) {
                     onFilter(true);
                 }
             });
+        });
+        const callRoles = new Promise((resolve, reject) => {
+            Manager.RoleManager.GetAllList(0, 1000000, "Status ne 0", resolve);
+        });
+        callRoles.then((response) => {
+            if (response && response.code == "00") {
+                GeneralManage.createTable(response.data.content, ["id", "code", "name"], 0, 1000000, "roleList", null, [`<input type='checkbox' name='roles' value='[0]'>`], false);
+            }
         });
         GeneralManage.createSelect([{ id: 1, name: "Kích hoạt" }, { id: 0, name: "Đóng" }], "id", "name", "status");
     }
