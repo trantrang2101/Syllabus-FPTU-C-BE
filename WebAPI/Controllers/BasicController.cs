@@ -62,7 +62,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "TEACHER, ACADEMIC, HEAD, DEAN")]
         public virtual IActionResult Delete(int id)
         {
             try
@@ -77,7 +77,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "TEACHER, ACADEMIC, HEAD, DEAN")]
         public virtual IActionResult Add(D dto)
         {
             try
@@ -91,7 +91,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "TEACHER, ACADEMIC, HEAD, DEAN")]
         public virtual IActionResult Update(D dto)
         {
             try
