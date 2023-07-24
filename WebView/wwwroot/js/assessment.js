@@ -2,25 +2,6 @@
     if (window.location.href.toLowerCase().includes("manager/assessment")) {
         onFilter(true);
     }
-    if (window.location.href.toLowerCase().includes("assessment/list")) {
-        onFilter();
-        $("#codeFilter").keyup(function (event) {
-            if (event.keyCode === 13) {
-                onFilter();
-            }
-        });
-    }
-    if (window.location.href.toLowerCase().includes("Assessment/Detail")) {
-        if (localStorage.getItem("detail")) {
-            const assessment = JSON.parse(localStorage.getItem("detail"));
-            console.log(assessment)
-            $(".page-header-title span").innerHTML = assessment.name;
-            //$(".page-header-subtitle").innerHTML = assessment.description;
-            localStorage.removeItem("detail");
-        } else {
-            window.history.back();
-        }
-    }
 });
 function getFilter() {
     const filter = [];

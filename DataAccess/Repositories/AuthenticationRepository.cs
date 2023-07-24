@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.DTO;
 using DataAccess.Repositories.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

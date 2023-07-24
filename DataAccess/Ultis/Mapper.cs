@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
 using DataAccess.DTO;
-using DataAccess.Models;
+using DataAccess.DTO;
 
 namespace DataAccess.Ultis
 {

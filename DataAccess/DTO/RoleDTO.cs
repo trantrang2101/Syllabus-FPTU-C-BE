@@ -1,6 +1,6 @@
 ﻿using BusinessObject.Models;
 
-namespace DataAccess.Models
+namespace DataAccess.DTO
 {
     public partial class RoleDTO : BasicModel
     {

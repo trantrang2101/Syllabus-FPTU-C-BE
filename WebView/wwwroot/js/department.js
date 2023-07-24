@@ -2,25 +2,6 @@
     if (window.location.href.toLowerCase().includes("manager/department")) {
         onFilter(true);
     }
-    if (window.location.href.toLowerCase().includes("department/list")) {
-        onFilter();
-        $("#codeFilter,#nameFilter").keyup(function (event) {
-            if (event.keyCode === 13) {
-                onFilter();
-            }
-        });
-    }
-    if (window.location.href.toLowerCase().includes("Department/Detail")) {
-        if (localStorage.getItem("detail")) {
-            const department = JSON.parse(localStorage.getItem("detail"));
-            console.log(department)
-            $(".page-header-title span").innerHTML = department.name;
-            //$(".page-header-subtitle").innerHTML = department.description;
-            localStorage.removeItem("detail");
-        } else {
-            window.history.back();
-        }
-    }
 });
 function getFilter() {
     const filter = [];

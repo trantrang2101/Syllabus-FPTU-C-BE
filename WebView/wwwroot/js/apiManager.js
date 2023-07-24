@@ -7,13 +7,8 @@ var APIManager = {
             console.log('Unauthorized: You need to log in or provide valid credentials.');
             localStorage.clear();
             window.location.href = '/Login';
-        } else if (jqXHR.status === 404) {
-            console.log('Resource not found.');
-        } else if (jqXHR.status === 500) {
-            console.log('Internal server error.');
         } else {
-            // Handle other errors
-            console.log('Error:', errorThrown);
+            window.location.href = "/Error" + jqXHR.status
         }
     },
     GetAPI: function (serviceUrl, successCallback) {
@@ -21,7 +16,7 @@ var APIManager = {
             type: "GET",
             url: serviceUrl,
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('authenticationToken')
+                Authorization: 'Bearer ' + GeneralManage.GetLocalStorage('authenticationToken')
             },
             contentType: "application/json",
             success: successCallback,
@@ -33,7 +28,7 @@ var APIManager = {
             type: "POST",
             url: serviceUrl,
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('authenticationToken')
+                Authorization: 'Bearer ' + GeneralManage.GetLocalStorage('authenticationToken')
             },
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -46,7 +41,7 @@ var APIManager = {
             type: "PUT",
             url: serviceUrl,
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('authenticationToken')
+                Authorization: 'Bearer ' + GeneralManage.GetLocalStorage('authenticationToken')
             },
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -59,7 +54,7 @@ var APIManager = {
             type: "DELETE",
             url: serviceUrl,
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('authenticationToken')
+                Authorization: 'Bearer ' + GeneralManage.GetLocalStorage('authenticationToken')
             },
             success: successCallback,
             error: APIManager.ErrorCatch
@@ -67,6 +62,16 @@ var APIManager = {
     }
 };
 var GeneralManage = {
+    GetLocalStorage: (key) => {
+        if (localStorage.getItem(key)) {
+            try {
+                return JSON.parse(localStorage.getItem(key));
+            } catch {
+                return localStorage.getItem(key);
+            }
+        }
+        return null;
+    },
     buildNested: (arr, parentId = 0,parentProperty = "parent") => {
         if (arr && arr.length > 0) {
             let result = [];
@@ -356,6 +361,16 @@ var Manager = {
         Delete: (id, resolve) => {
             const url = `https://localhost:7124/api/Term/Delete/${id}`;
             APIManager.DeleteAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        }
+    },
+    GradeDetailManager: {
+        GetAllList: (page, itemsPerPage, filter, resolve) => {
+            const url = `https://localhost:7124/api/GradeDetail/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
+            APIManager.GetAPI(url, onSuccess);
 
             function onSuccess(response) {
                 resolve(response)
@@ -912,6 +927,16 @@ var Manager = {
                 resolve(response)
             }
         }
+    },
+    CurriculumDetailManager: {
+        Detail: (id, resolve) => {
+            const url = `https://localhost:7124/api/CurriculumDetail/Detail/${id}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
     },
     DepartmentManager: {
         GetAllList: (page, itemsPerPage, filter, resolve) => {

@@ -2,25 +2,6 @@
     if (window.location.href.toLowerCase().includes("manager/account")) {
         onFilter(true);
     }
-    if (window.location.href.toLowerCase().includes("account/list")) {
-        onFilter();
-        $("#codeFilter,#nameFilter,,#emailFilter").keyup(function (event) {
-            if (event.keyCode === 13) {
-                onFilter();
-            }
-        });
-    }
-    if (window.location.href.toLowerCase().includes("Account/Detail")) {
-        if (localStorage.getItem("detail")) {
-            const account = JSON.parse(localStorage.getItem("detail"));
-            console.log(account)
-            $(".page-header-title span").innerHTML = account.name;
-            $(".page-header-subtitle").innerHTML = account.description;
-            localStorage.removeItem("detail");
-        } else {
-            window.history.back();
-        }
-    }
 });
 function getFilter() {
     const filter = [];

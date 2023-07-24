@@ -1,7 +1,6 @@
 $(document).ready(() => {
-    const infoString = localStorage.getItem('info'), userString = localStorage.getItem('user');
-    if (infoString && userString) {
-        const info = JSON.parse(infoString), user = JSON.parse(userString);
+    const info = GeneralManage.GetLocalStorage('info'), user = GeneralManage.GetLocalStorage('user');
+    if (info && user) {
         console.log(info);
         document.querySelectorAll('.user-image').forEach(x => {
             x.src = info.picture

@@ -2,25 +2,6 @@
     if (window.location.href.toLowerCase().includes("manager/class")) {
         onFilter(true);
     }
-    if (window.location.href.toLowerCase().includes("class/list")) {
-        onFilter();
-        $("#codeFilter,#nameFilter").keyup(function (event) {
-            if (event.keyCode === 13) {
-                onFilter();
-            }
-        });
-    }
-    if (window.location.href.toLowerCase().includes("Class/Detail")) {
-        if (localStorage.getItem("detail")) {
-            const classes = JSON.parse(localStorage.getItem("detail"));
-            console.log(classes)
-            $(".page-header-title span").innerHTML = classes.name;
-            //$(".page-header-subtitle").innerHTML = class.description;
-            localStorage.removeItem("detail");
-        } else {
-            window.history.back();
-        }
-    }
 });
 function getFilter() {
     const filter = [];

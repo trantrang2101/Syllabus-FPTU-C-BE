@@ -1,5 +1,5 @@
 ﻿using BusinessObject.Models;
-using DataAccess.Models;
+using DataAccess.DTO;
 using DataAccess.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
 

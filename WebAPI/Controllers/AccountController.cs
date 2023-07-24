@@ -1,5 +1,5 @@
 ﻿using BusinessObject.Models;
-using DataAccess.Models;
+using DataAccess.DTO;
 using DataAccess.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                return Ok(new BaseResponse<AccountDTO>().successWithData(_repository.Login(gmail)).ToJson());
+                return Ok(new BaseResponse<object>().successWithData(_repository.Login(gmail)).ToJson());
             }
             catch (Exception ex)
             {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
-using DataAccess.Models;
+using DataAccess.DTO;
 using DataAccess.Repositories.Interface;
 using System;
 using System.Collections.Generic;

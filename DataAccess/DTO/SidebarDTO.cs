@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DataAccess.Models
+namespace DataAccess.DTO
 {
     public partial class SidebarDTO : BasicModel
     {

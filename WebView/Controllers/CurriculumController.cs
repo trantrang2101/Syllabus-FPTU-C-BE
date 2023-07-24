@@ -31,6 +31,22 @@ namespace WebView.Controllers
             }
             return View();
         }
+
+        public IActionResult Subject(int id)
+        {
+            string dataJson = HttpContext.Session.GetString("Subject");
+            Console.WriteLine(dataJson);
+            if (!string.IsNullOrEmpty(dataJson))
+            {
+                CurriculumDetailDTO value = JsonConvert.DeserializeObject<CurriculumDetailDTO>(dataJson);
+                ViewData["Title"] = value.Curriculum.Code;
+                ViewData["SubTitle"] = value.Subject.Code+" - "+value.Subject.Name;
+                ViewData["Icon"] = "fa-solid fa-book-bookmark";
+                HttpContext.Session.Remove("Subject");
+            }
+            return View();
+        }
+
         public IActionResult List()
         {
             return View();

@@ -3,6 +3,17 @@
     ViewData["SubTitle"] = "Các lớp học theo từng môn ở kỳ này của bạn";
     ViewData["Icon"] = "fa-solid fa-star-and-crescent";
 }
+@section Styles{
+    <style>
+        .bg-primary-subtle {
+            background-color: #cfe2ff !important;
+        }
+
+        a {
+            cursor: pointer;
+        }
+    </style>
+}
 <div class="container-fluid px-5 mt-n10">
     <div class="row">
         <div class="col-xl-2 col-md-3 animated--fade-in-up">
@@ -19,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-xl-6 col animated--fade-in-up" *ngIf="listMark">
+        <div class="col-12 col-xl-6 col animated--fade-in-up" id="listMark">
             <div class="card mb-4 mb-xl-0">
                 <div class="card-body p-3 table-responsive">
                     <table class="table ">
@@ -33,15 +44,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let item of listMark">
-                                <tr *ngFor="let entity of item.assessment;let i=index">
-                                    <td class="fw-bold" *ngIf="i==0" [rowSpan]="item.assessment.length">{{item.category.name}}</td>
-                                    <td class="fw-semibold">{{entity.name}}</td>
-                                    <td>{{entity.weight}}</td>
-                                    <td>{{entity.mark}}</td>
-                                    <td>{{entity.comment}}</td>
-                                </tr>
-                            </ng-container>
                         </tbody>
                     </table>
                 </div>
@@ -52,5 +54,5 @@
 
 
 @section Scripts{
-    <script src="~/js/grade.js"></script>
+    <script src="~/js/grade/semester.js"></script>
 }

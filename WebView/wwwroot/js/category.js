@@ -2,25 +2,6 @@
     if (window.location.href.toLowerCase().includes("manager/category")) {
         onFilter(true);
     }
-    if (window.location.href.toLowerCase().includes("category/list")) {
-        onFilter();
-        $("#nameFilter").keyup(function (event) {
-            if (event.keyCode === 13) {
-                onFilter();
-            }
-        });
-    }
-    if (window.location.href.toLowerCase().includes("Category/Detail")) {
-        if (localStorage.getItem("detail")) {
-            const category = JSON.parse(localStorage.getItem("detail"));
-            console.log(category)
-            $(".page-header-title span").innerHTML = category.name;
-            //$(".page-header-subtitle").innerHTML = category.description;
-            localStorage.removeItem("detail");
-        } else {
-            window.history.back();
-        }
-    }
 });
 function getFilter() {
     const filter = [];

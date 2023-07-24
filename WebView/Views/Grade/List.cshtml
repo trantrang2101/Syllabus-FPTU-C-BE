@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Lớp học";
+    ViewData["SubTitle"] = "Các lớp học bạn dạy ở kỳ";
+    ViewData["Icon"] = "fa-solid fa-star-and-crescent";
+}
+@section Styles{
+    <style>
+        .bg-primary-subtle {
+            background-color: #cfe2ff !important;
+        }
+        a {
+            cursor:pointer;
+        }
+    </style>
+}
+<div class="container-fluid px-5 mt-n10">
+    <div class="row">
+        <div class="col-4 animated--fade-in-up">
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Môn</div>
+                <div class="list-group list-group-flush small" id="listSemester">
+                </div>
+            </div>
+        </div>
+        <div class="col-8 animated--fade-in-up">
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Khóa học</div>
+                <div class="list-group list-group-flush small" id="listCourse">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal" id="btnPassword">
+    Launch demo modal
+</button>
+<div class="modal fade " id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Nhập mật khẩu</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="password">Nhập mật khẩu để nhập điểm</label>
+                        <div class="input-group mb-3">
+                            <input type="password" id="password" class="form-control border-end-0">
+                            <span class="input-group-text bg-transparent" id="passwordIcon">
+                                    <i class="fa-regular fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Nhập</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/grade/list.js"></script>
+}

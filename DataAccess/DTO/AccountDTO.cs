@@ -1,6 +1,6 @@
 ﻿using BusinessObject.Models;
 
-namespace DataAccess.Models
+namespace DataAccess.DTO
 {
     public partial class AccountDTO : BasicModel
     {
@@ -15,7 +15,7 @@ namespace DataAccess.Models
         public string? Name { get; set; }
         public string? Password { get; set; }
         public string? Token { get; set; }
-
+        public TermDTO? CurrentTerm { get; set; }
         public virtual ICollection<RoleDTO> Roles { get; set; }
         public virtual ICollection<SidebarDTO> Sidebars{ get; set; }
     }

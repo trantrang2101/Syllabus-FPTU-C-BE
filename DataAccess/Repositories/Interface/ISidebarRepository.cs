@@ -1,5 +1,5 @@
 ﻿using BusinessObject.Models;
-using DataAccess.Models;
+using DataAccess.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,7 @@
 $(document).ready(() => {
     const sidebar = document.getElementById('item0')
     if (sidebar) {
-        const menu = JSON.parse(localStorage.getItem('sidebars'));
+        const menu = GeneralManage.GetLocalStorage('sidebars');
         if (menu) {
             for (let i = 0; i < menu.length; i++) {
                 const entity = menu[i];

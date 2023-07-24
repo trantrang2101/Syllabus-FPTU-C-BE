@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
-using DataAccess.Models;
+using DataAccess.DTO;
 using DataAccess.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +30,7 @@ namespace DataAccess.Repositories
             AccountDTO account = _mapper.Map<AccountDTO>(acc);
             string token = _authenticationRepository.GetJwtToken(account);
             account.Token = token;
+            account.CurrentTerm = _mapper.Map<TermDTO>(_context.Terms.FirstOrDefault(x => x.StartDate <= DateTime.Today && x.EndDate >= DateTime.Today));
             return account;
         }
 
