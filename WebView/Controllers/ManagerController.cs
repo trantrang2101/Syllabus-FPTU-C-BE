@@ -71,5 +71,10 @@ namespace WebView.Controllers
         {
             return View();
         }
+
+        public IActionResult Sidebar()
+        {
+            return View();
+        }
     }
 }
