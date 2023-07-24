@@ -5,66 +5,26 @@
 <div class="container-fluid px-5 mt-n10">
     <div class="row">
         <div class="col-12 col-md-3">
-            <div class="card mb-4 mb-xl-2 animated--fade-in-up" *ngIf="listCourse&&listCourse.length>0">
+            <div class="card mb-4 mb-xl-2 animated--fade-in-up">
                 <div class="card-body">
                     <select class="form-select" id="listCourse"></select>
                 </div>
             </div>
-            <div class="card mb-4 mb-xl-0 animated--fade-in-up" *ngIf="listAssessment&&listAssessment.length>0">
+            <div class="card mb-4 mb-xl-2 animated--fade-in-up">
                 <div class="card-header">Môn học</div>
+                <div class="card-body" id="listAssessment">
+                </div>
+            </div>
+            <div class="card mb-4 mb-xl-0 animated--fade-in-up">
                 <div class="card-body">
-                    <div class="mb-0">
-                        <ng-container *ngFor="let category of listAssessment;let i = index">
-                            <label class="h6 mb-2">{{category.category.name}}</label>
-                            <div class="form-check mb-2" *ngFor="let assessment of category.assessment;let index=index">
-                                <input class="form-check-input" [id]="'assessment'+assessment.id" type="checkbox"
-                                       [(ngModel)]="assessment.enable" (ngModelChange)="onCheck(i,assessment.id)" />
-                                <label class="form-check-label" for="{{'assessment'+assessment.id}}">{{assessment.name}}</label>
-                            </div>
-                        </ng-container>
-                    </div>
+                    <button type="button" class="btn btn-primary" onclick="onSave()">Primary</button>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-9 animated--fade-in-up" *ngIf="listStudent.length>0&&listAssessment.length>0">
+        <div class="col-12 col-md-9 animated--fade-in-up">
             <div class="card mb-4 mb-xl-0">
-                <div class="card-body p-3 table-responsive">
-                    <table class="table ">
-                        <thead class="">
-                            <tr>
-                                <th rowspan="2" class="align-middle">Họ tên sinh viên</th>
-                                <th rowspan="2" class="align-middle">Mã số sinh viên</th>
-                                <ng-container *ngFor="let item of listAssessment">
-                                    <th class="text-center align-middle" [colSpan]="getEnableAssessment(item.assessment)"
-                                        [rowSpan]="item.assessment.length>1?1:2" *ngIf="item.enable">
-                                        {{item.category.name}}
-                                    </th>
-                                </ng-container>
-                            </tr>
-                            <tr>
-                                <ng-container *ngFor="let item of listAssessment">
-                                    <ng-container *ngFor="let assessment of item.assessment">
-                                        <th class="text-center align-middle" *ngIf="item.assessment.length>1&&assessment.enable">
-                                            {{assessment.name}} ({{assessment.weight}} %)
-                                        </th>
-                                    </ng-container>
-                                </ng-container>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of listStudent;let i = index">
-                                <td>{{item.name}}</td>
-                                <td>{{item.code}}</td>
-                                <ng-container *ngFor="let entity of listMatrix[i]; let j=index">
-                                    <td class="text-center" *ngIf="assessments[j].enable">
-                                        <input type="hidden" [value]="j">
-                                        <input type="number" [(ngModel)]="entity.mark" min="0" max="10" class="form-control"
-                                               (change)="checkValidateMark(entity)">
-                                    </td>
-                                </ng-container>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-body p-3 table-responsive" id="listStudent">
+                    <table class="table "></table>
                 </div>
             </div>
         </div>

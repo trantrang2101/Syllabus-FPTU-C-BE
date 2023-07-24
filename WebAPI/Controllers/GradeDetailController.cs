@@ -16,5 +16,19 @@ namespace WebAPI.Controllers
         {
             _repository = repository;
         }
+
+        [HttpPost]
+        [Authorize(Roles = "TEACHER")]
+        public IActionResult UpdateAll(List<GradeDetail> list)
+        {
+            try
+            {
+                return Ok(new BaseResponse<object>().successWithData(_repository.UpdateAll(list)).ToJson());
+            }
+            catch (Exception ex)
+            {
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
+            }
+        }
     }
 }

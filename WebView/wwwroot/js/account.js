@@ -61,8 +61,8 @@ function onFilter(isManager = false) {
     if (isManager) {
         $('#btnDelete').prop('disabled', true);
         $('#btnDelete').click(function (e) {
-            var old_element = document.getElementById("btnDelete");
-            var new_element = old_element.cloneNode(true);
+            const old_element = document.getElementById("btnDelete");
+            const new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
             var myModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
             myModal.show();
@@ -80,8 +80,8 @@ function onFilter(isManager = false) {
             myModal.hide();
         })
         $('#btnAdd').click(function (e) {
-            var old_element = document.getElementById("btnAdd");
-            var new_element = old_element.cloneNode(true);
+            const old_element = document.getElementById("btnAdd");
+            const new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
             if ($('tbody tr.table-primary')) {
                 $("tbody tr.table-primary").removeClass("table-primary");
@@ -90,22 +90,21 @@ function onFilter(isManager = false) {
             $('#btnDelete').prop('disabled', true);
         })
         $('#btnSave').click(function (e) {
-            var old_element = document.getElementById("btnSave");
-            var new_element = old_element.cloneNode(true);
+            const old_element = document.getElementById("btnSave");
+            const new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
-            console.log(GeneralManage.getAllFormValue('formData'));
-            //const callSave = new Promise((resolve, reject) => {
-            //    if ($('[name="id"]').val()) {
-            //        Manager.AccountManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
-            //    } else {
-            //        Manager.AccountManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
-            //    }
-            //});
-            //callSave.then((response) => {
-            //    if (response && response.code == "00") {
-            //        onFilter(true);
-            //    }
-            //});
+            const callSave = new Promise((resolve, reject) => {
+                if ($('[name="id"]').val()) {
+                    Manager.AccountManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
+                } else {
+                    Manager.AccountManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
+                }
+            });
+            callSave.then((response) => {
+                if (response && response.code == "00") {
+                    onFilter(true);
+                }
+            });
         });
         const callRoles = new Promise((resolve, reject) => {
             Manager.RoleManager.GetAllList(0, 1000000, "Status ne 0", resolve);

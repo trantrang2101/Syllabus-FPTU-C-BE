@@ -379,7 +379,15 @@ var Manager = {
             function onSuccess(response) {
                 resolve(response)
             }
-        }
+        },
+        UpdateAll: (objectValue, resolve) => {
+            const url = `https://localhost:7124/api/GradeDetail/Update`;
+            APIManager.PostAPI(url, objectValue, onSuccess)
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
     },
     StudentCourseManager: {
         GetAllList: (page, itemsPerPage, filter, resolve) => {

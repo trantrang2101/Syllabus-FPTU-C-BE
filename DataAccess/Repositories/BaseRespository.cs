@@ -87,10 +87,18 @@ namespace DataAccess.Repositories
             {
                 throw new Exception("Không tìm thấy hoặc đã bị xóa");
             }
-            B valueChanges = _mapper.Map<B>(dto);
             basic = _mapper.Map<B>(dto);
             SetObjectsToNull(basic);
-            _context.Entry(basic).CurrentValues.SetValues(valueChanges);
+            B attachedEntity = table.Find(dto.Id);
+            if (attachedEntity != null)
+            {
+                var attachedEntry = _context.Entry(attachedEntity);
+                attachedEntry.CurrentValues.SetValues(basic);
+            }
+            else
+            {
+                _context.Entry(basic).State = EntityState.Modified;
+            }
             var changes = _context.SaveChanges();
             Console.WriteLine(changes);
             return Get(dto.Id);

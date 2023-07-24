@@ -20,13 +20,24 @@ namespace DataAccess.Repositories
 
         public override List<GradeDetailDTO> GetAll()
         {
-            List<GradeDetail> products = _context.GradeDetails.Include("StudentCourse").Include("GradeGeneral.Assessment.Category").ToList();
+            List<GradeDetail> products = _context.GradeDetails.Include("StudentCourse.Course").Include("StudentCourse.Student").Include("GradeGeneral.Assessment.Category").ToList();
             List<GradeDetailDTO> dto = new List<GradeDetailDTO>() { };
             if (products != null && products.Count() > 0)
             {
                 return _mapper.Map<List<GradeDetailDTO>>(products);
             }
             return dto;
+        }
+
+        public bool UpdateAll(List<GradeDetail> gradeDetailList)
+        {
+            _context.GradeDetails.UpdateRange(gradeDetailList);
+            var changes = _context.SaveChanges();
+            if (changes>0)
+            {
+                return true;
+            }
+            throw new Exception("Không có gì thay đổi");
         }
     }
 }

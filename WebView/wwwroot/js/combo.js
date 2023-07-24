@@ -87,8 +87,8 @@ function onFilter(isManager = false) {
         GeneralManage.createEditor('description');
         $('#btnDelete').prop('disabled', true);
         $('#btnDelete').click(function (e) {
-            var old_element = document.getElementById("btnDelete");
-            var new_element = old_element.cloneNode(true);
+            const old_element = document.getElementById("btnDelete");
+            const new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
             var myModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
             myModal.show();
@@ -109,15 +109,15 @@ function onFilter(isManager = false) {
             if ($('tbody tr.table-primary')) {
                 $("tbody tr.table-primary").removeClass("table-primary");
             }
-            var old_element = document.getElementById("btnAdd");
-            var new_element = old_element.cloneNode(true);
+            const old_element = document.getElementById("btnAdd");
+            const new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
             GeneralManage.setAllFormValue('formData', {});
             $('#btnDelete').prop('disabled', true);
         })
         $('#btnSave').click(function (e) {
-            var old_element = document.getElementById("btnSave");
-            var new_element = old_element.cloneNode(true);
+            const old_element = document.getElementById("btnSave");
+            const new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
             const callSave = new Promise((resolve, reject) => {
                 if ($('[name="id"]').val()) {

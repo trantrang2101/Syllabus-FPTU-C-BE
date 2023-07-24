@@ -34,6 +34,46 @@ namespace DataAccess.Repositories
             return account;
         }
 
+        public override AccountDTO Update(AccountDTO dto)
+        {
+            if (dto == null)
+            {
+                throw new Exception("Chưa truyền giá trị vào");
+            }
+            Account basic = table.FirstOrDefault(x => x.Id == dto.Id);
+            if (basic == null || basic.Status == 0)
+            {
+                throw new Exception("Không tìm thấy hoặc đã bị xóa");
+            }
+            if (basic.Email!=dto.Email&&table.FirstOrDefault(x => x.Email.ToLower() == dto.Email.ToLower()) != null)
+            {
+                throw new Exception("Email này đã tồn tại rồi");
+            }
+            basic = _mapper.Map<Account>(dto);
+            basic.AccountRoles = new List<AccountRole>();
+            foreach (var item in dto.Roles)
+            {
+                basic.AccountRoles.Add(new AccountRole()
+                {
+                    RoleId = item.Id,
+                });
+            }
+            basic = _mapper.Map<Account>(dto);
+            Account attachedEntity = table.Find(dto.Id);
+            if (attachedEntity != null)
+            {
+                var attachedEntry = _context.Entry(attachedEntity);
+                attachedEntry.CurrentValues.SetValues(basic);
+            }
+            else
+            {
+                _context.Entry(basic).State = EntityState.Modified;
+            }
+            var changes = _context.SaveChanges();
+            Console.WriteLine(changes);
+            return Get(basic.Id);
+        }
+
         public override AccountDTO Add(AccountDTO dto)
         {
             if (dto == null)
