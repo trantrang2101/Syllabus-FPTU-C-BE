@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using Newtonsoft.Json;
 
 namespace DataAccess.DTO
 {
@@ -13,6 +14,7 @@ namespace DataAccess.DTO
         public string? Code { get; set; }
         public string? Email { get; set; }
         public string? Name { get; set; }
+        [JsonIgnore]
         public string? Password { get; set; }
         public string? Token { get; set; }
         public TermDTO? CurrentTerm { get; set; }

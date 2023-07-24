@@ -149,7 +149,7 @@ function onFilter(isManager = false) {
         });
 
         const callAccount = new Promise((resolve, reject) => {
-            Manager.AccountManager.GetAllList(0, 1000000, "Status ne 0", resolve);
+            Manager.AccountManager.GetAllList(0, 1000000, "roles/any(role: tolower(role/code) eq 'TEACHER') and Status ne 0", resolve);
         });
         callAccount.then((response) => {
             if (response && response.code == "00") {

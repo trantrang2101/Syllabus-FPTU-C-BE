@@ -93,18 +93,19 @@ function onFilter(isManager = false) {
             var old_element = document.getElementById("btnSave");
             var new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
-            const callSave = new Promise((resolve, reject) => {
-                if ($('[name="id"]').val()) {
-                    Manager.AccountManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
-                } else {
-                    Manager.AccountManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
-                }
-            });
-            callSave.then((response) => {
-                if (response && response.code == "00") {
-                    onFilter(true);
-                }
-            });
+            console.log(GeneralManage.getAllFormValue('formData'));
+            //const callSave = new Promise((resolve, reject) => {
+            //    if ($('[name="id"]').val()) {
+            //        Manager.AccountManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
+            //    } else {
+            //        Manager.AccountManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
+            //    }
+            //});
+            //callSave.then((response) => {
+            //    if (response && response.code == "00") {
+            //        onFilter(true);
+            //    }
+            //});
         });
         const callRoles = new Promise((resolve, reject) => {
             Manager.RoleManager.GetAllList(0, 1000000, "Status ne 0", resolve);

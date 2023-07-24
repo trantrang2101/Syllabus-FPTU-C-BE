@@ -138,7 +138,7 @@ var GeneralManage = {
                     (GeneralManage.StringToObject(fieldPair, $(this).attr("name"), $(this).val()));
                 else if ($(this).attr('type') === 'checkbox' || ($(this).attr('type') === 'radio')) {
                     if ($(this).is(':checked')) {
-                        GeneralManage.StringToObject(fieldPair, $(this).attr("name"), $(this).data('value'));
+                        GeneralManage.StringToObject(fieldPair, $(this).attr("name"), $(this).data('value'),true);
                     }
                 }
                 else 
@@ -147,7 +147,7 @@ var GeneralManage = {
         });
         return fieldPair;
     },
-    StringToObject: (result, inputString, value) => {
+    StringToObject: (result, inputString, value, isCheckBox=false) => {
         if (!value) {
             return;
         }
@@ -170,7 +170,11 @@ var GeneralManage = {
             }
             nestedObj[finalKey].push(value);
         } else {
-            nestedObj[finalKey] = value;
+            if (isCheckBox) {
+                nestedObj[finalKey] = [value];
+            } else {
+                nestedObj[finalKey] = value;
+            }
         }
         return result;
     },
@@ -653,6 +657,13 @@ var Manager = {
         }
     },
     AccountManager: {
+        CheckPassword: (url, resolve) => {
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
         GetAllList: (page, itemsPerPage, filter, resolve) => {
             const url = `https://localhost:7124/api/Account/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
             APIManager.GetAPI(url, onSuccess);

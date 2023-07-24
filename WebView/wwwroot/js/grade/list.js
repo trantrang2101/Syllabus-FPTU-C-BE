@@ -1,3 +1,4 @@
+var course = {}
 $(document).ready(() => {
     if (document.getElementById('passwordIcon')) {
         document.getElementById('passwordIcon').addEventListener('click', () => {
@@ -49,8 +50,18 @@ $(document).ready(() => {
                         if ($(`.row-listCourse-${item.id}`)) {
                             $(`.row-listCourse-${item.id}`).addClass('bg-primary-subtle');
                         }
-                        $('#btnPassword').click()
-                        //window.location.href = "/Grade/Detail?id=" + item.id;
+                        if (localStorage.getItem("checkPassword")) {
+                            window.location.href = '/Grade/Detail?id=' + item.id;
+                            return;
+                        } else {
+                            $('#btnPassword').click();
+                            $("#password").keyup(function (event) {
+                                if (event.keyCode === 13) {
+                                    onCheckPassword();
+                                }
+                            });
+                            course = JSON.parse(JSON.stringify(item));
+                        }
                     }
                 }
             }
@@ -74,4 +85,20 @@ function createListLink(list, stringFormat, keys, idName, onClick) {
         }
         divContainer.appendChild(a);
     }
+}
+function onCheckPassword() {
+    const callAPI = new Promise((resolve, reject) => {
+        const user = GeneralManage.GetLocalStorage('user');
+        const url = `https://localhost:7124/api/Account/Password?id=${user.id}&password=${$('#password').val()}`;
+        Manager.AccountManager.CheckPassword(url, resolve);
+    });
+    callAPI.then((response) => {
+        if (response && response.code == "00") {
+            localStorage.setItem('checkPassword', true);
+            window.location.href = '/Grade/Detail?id=' + course.id;
+            return;
+        } else {
+            $('#btnPassword').click()
+        }
+    });
 }

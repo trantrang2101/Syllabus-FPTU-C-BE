@@ -12,6 +12,5 @@ namespace DataAccess.DTO
         public string? Name { get; set; }
 
         public virtual CategoryDTO? Category { get; set; }
-        public virtual ICollection<GradeGeneral> GradeGenerals { get; set; } = new HashSet<GradeGeneral>();
     }
 }

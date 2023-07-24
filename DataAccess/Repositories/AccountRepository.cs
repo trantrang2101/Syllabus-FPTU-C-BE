@@ -21,7 +21,7 @@ namespace DataAccess.Repositories
             {
                 throw new Exception("Trường Email là trường bắt buộc");
             }
-            Account? acc = table.Where(x => x.Email.ToLower() == gmail.ToLower())
+            Account? acc = table.Where(x => x.Email.ToLower() == gmail.ToLower() && x.Status > 0)
                 .Include("AccountRoles.Role.RoleSidebars.Sidebar").FirstOrDefault();
             if (acc == null)
             {
@@ -39,6 +39,10 @@ namespace DataAccess.Repositories
             if (dto == null)
             {
                 throw new Exception("Chưa truyền giá trị vào");
+            }
+            if (table.FirstOrDefault(x => x.Email.ToLower() == dto.Email.ToLower())!=null)
+            {
+                throw new Exception("Email này đã tồn tại rồi");
             }
             Account basic = _mapper.Map<Account>(dto);
             basic.AccountRoles = new List<AccountRole>();
@@ -73,6 +77,16 @@ namespace DataAccess.Repositories
                 throw new Exception("Không tìm thấy hoặc đã bị xóa");
             }
             return _mapper.Map<AccountDTO>(basic);
+        }
+
+        public bool CheckPassword(long id, string password)
+        {
+            Account? acc = table.FirstOrDefault(x => x.Id == id && x.Password == password);
+            if (acc != null)
+            {
+                return true;
+            }
+            throw new Exception("Mật khẩu không đúng hoặc không tìm thấy tài khoản");
         }
     }
 }
