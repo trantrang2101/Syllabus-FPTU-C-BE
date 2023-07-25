@@ -49,8 +49,12 @@
                         <input type="number" class="form-control d-none" name="id">
                         <div class="col-12">
                             <label for="icon" class="form-label">Icon</label>
-                            <input type="text" class="form-control" id="icon" name="icon"
-                                   placeholder="Biểu tượng hiển thị">
+                            <div class="input-group mb-3">
+                                <select class="form-select" id="icon" name="icon" placeholder="Biểu tượng hiển thị"></select>
+                                <button class="btn btn-outline-dark" type="button">
+                                    <i class="" id="iconShow"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="col-12">
                             <label for="description" class="form-label">Mô tả</label>
@@ -111,5 +115,6 @@
 </div>
 
 @section Scripts{
+    <script src="~/js/fontawesome-cheatsheet.js"></script>
     <script src="~/js/managingsidebar.js"></script>
 }

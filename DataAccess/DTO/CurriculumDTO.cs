@@ -14,7 +14,6 @@ namespace DataAccess.DTO
         public string? Name { get; set; }
 
         public virtual MajorDTO? Major { get; set; }
-        public virtual ICollection<ComboCurriculumDTO> ComboCurricula { get; set; } = new HashSet<ComboCurriculumDTO>();
         public virtual ICollection<CurriculumDetailDTO> CurriculumDetails { get; set; } = new HashSet<CurriculumDetailDTO>();
         public virtual ICollection<StudentProgressDTO> StudentProgresses { get; set; } = new HashSet<StudentProgressDTO>();
     }

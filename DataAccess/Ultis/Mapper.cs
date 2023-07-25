@@ -17,7 +17,8 @@ namespace DataAccess.Ultis
 
             CreateMap<RoleSidebar, RoleSidebarDTO>().ReverseMap();
 
-            CreateMap<Sidebar, SidebarDTO>().ReverseMap();
+            CreateMap<SidebarDTO,Sidebar>().ForMember(des => des.ParentId,
+                act => act.MapFrom(o => o.Parent.Id)).ReverseMap();
 
             CreateMap<Account, AccountDTO>().ForMember(des => des.Roles,
                 act => act.MapFrom(o => o.AccountRoles.Select(ar => ar.Role)))
@@ -31,12 +32,6 @@ namespace DataAccess.Ultis
             CreateMap<Category, CategoryDTO>().ReverseMap();
 
             CreateMap<Class, ClassDTO>().ReverseMap();
-
-            CreateMap<Combo, ComboDTO>().ReverseMap();
-
-            CreateMap<ComboCurriculum, ComboCurriculumDTO>().ReverseMap();
-
-            CreateMap<ComboDetail, ComboDetailDTO>().ReverseMap();
 
             CreateMap<Course, CourseDTO>().ReverseMap();
 

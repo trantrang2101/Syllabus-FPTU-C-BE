@@ -1,5 +1,6 @@
 ﻿$(document).ready(() => {
     if (window.location.href.toLowerCase().includes("manager/sidebar")) {
+        GeneralManage.createEditor('description');
         onFilter(true);
     }
     if (window.location.href.toLowerCase().includes("sidebar/list")) {
@@ -62,6 +63,7 @@ function callListAPI(page, itemsPerPage, isManager) {
                         if (isManager) {
                             $('#btnDelete').prop('disabled', false);
                             GeneralManage.setAllFormValue("formData", resp.data);
+                            onChange();
                         } else {
                             localStorage.setItem("detail", JSON.stringify(resp.data));
                             window.location.href = "/Sidebar/Detail"
@@ -75,7 +77,6 @@ function callListAPI(page, itemsPerPage, isManager) {
 function onFilter(isManager = false) {
     var page = 0, itemsPerPage = 20;
     if (isManager) {
-        GeneralManage.createEditor('description');
         $('#btnDelete').prop('disabled', true);
         $('#btnDelete').click(function (e) {
             const old_element = document.getElementById("btnDelete");
@@ -110,11 +111,13 @@ function onFilter(isManager = false) {
             const old_element = document.getElementById("btnSave");
             const new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
+            const data = (GeneralManage.getAllFormValue('formData'));
+            const value = data.parent.id === "undefined" ? { ...data, parent: null } : { ...data };
             const callSave = new Promise((resolve, reject) => {
                 if ($('[name="id"]').val()) {
-                    Manager.SidebarManager.Update(GeneralManage.getAllFormValue('formData'), resolve)
+                    Manager.SidebarManager.Update(value, resolve)
                 } else {
-                    Manager.SidebarManager.Add(GeneralManage.getAllFormValue('formData'), resolve)
+                    Manager.SidebarManager.Add(value, resolve)
                 }
             });
             callSave.then((response) => {
@@ -128,10 +131,17 @@ function onFilter(isManager = false) {
         });
         callSidebar.then((response) => {
             if (response && response.code == "00") {
-                GeneralManage.createSelect(response.data.content, "id", "name", "parent");
+                const list = response.data.content;
+                list.unshift({ id: undefined, name: "Độc lập không cần cha" });
+                GeneralManage.createSelect(list, "id", "name", "parent");
             }
         });
+        GeneralManage.createSelect(listIconClassName.map(x => ({ name: x })), "name", "name", "icon", onChange);
         GeneralManage.createSelect([{ id: 1, name: "Kích hoạt" }, { id: 0, name: "Đóng" }], "id", "name", "status");
     }
     callListAPI(page, itemsPerPage, isManager);
+}
+function onChange() {
+    console.log($('#icon').val());
+    document.getElementById('iconShow').classList = $('#icon').val()
 }

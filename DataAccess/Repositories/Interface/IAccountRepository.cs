@@ -8,5 +8,7 @@ namespace DataAccess.Repositories.Interface
         AccountDTO Login(string username);
 
         bool CheckPassword(long id, string password);
+
+        bool AddListStudent(List<AccountDTO> accounts);
     }
 }

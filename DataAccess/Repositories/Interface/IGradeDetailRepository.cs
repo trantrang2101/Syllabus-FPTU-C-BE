@@ -11,5 +11,6 @@ namespace DataAccess.Repositories.Interface
     public interface IGradeDetailRepository : IBaseRepository<GradeDetail, GradeDetailDTO>
     {
         bool UpdateAll(List<GradeDetail> gradeDetailList);
+        IEnumerable<GradeDetailDTO> ExportExcel(int courseId);
     }
 }

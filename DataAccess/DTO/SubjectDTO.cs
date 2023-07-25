@@ -14,8 +14,6 @@ namespace DataAccess.DTO
         public int Slot { get; set; }
 
         public virtual DepartmentDTO? Department { get; set; }
-        public virtual ICollection<ComboDetailDTO> ComboDetailReplaceSubjects { get; set; } = new HashSet<ComboDetailDTO>();
-        public virtual ICollection<ComboDetailDTO> ComboDetailSubjects { get; set; } = new HashSet<ComboDetailDTO>();
         public virtual ICollection<CourseDTO> Courses { get; set; } = new HashSet<CourseDTO>();
         public virtual ICollection<CurriculumDetailDTO> CurriculumDetails { get; set; } = new HashSet<CurriculumDetailDTO>();
     }

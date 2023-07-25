@@ -112,9 +112,8 @@ var GeneralManage = {
                     $(this).val(value !== null && value !== undefined ? value : $(this).first().val()).change();;
                 } else if ($(this).is('[type="checkbox"]') || $(this).is('[type="radio"]')) {
                     if (value !== null && value !== undefined && typeof value === 'object' && Array.isArray(value)) {
-                        value.forEach(val => {
-                            $(this).prop("checked", JSON.stringify($(this).data('value')) == JSON.stringify(val));
-                        })
+                        const check = value.some(x => x.id === $(this).data('value').id);
+                        $(this).prop("checked", check);
                     } else {
                         $(this).prop("checked", false);
                     }
@@ -187,7 +186,7 @@ var GeneralManage = {
         var a = s.split('.');
         for (var i = 0, n = a.length; i < n; ++i) {
             var k = a[i];
-            if (k in o) {
+            if (o[k] != null && o[k] != undefined && k in o) {
                 o = o[k];
             } else {
                 return;
@@ -203,7 +202,7 @@ var GeneralManage = {
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     },
-    createSelect: (list, nameValue, nameDisplay, idName) => {
+    createSelect: (list, nameValue, nameDisplay, idName,onChange = null) => {
         const select = document.querySelector(`#${idName}`);
         select.innerHTML = ""
         if (list) {
@@ -213,6 +212,9 @@ var GeneralManage = {
                 option.innerHTML = GeneralManage.ObjectByString(item, nameDisplay);
                 select.appendChild(option);
             });
+            if (onChange) {
+                select.addEventListener('change', onChange);
+            }
         } else {
             select.innerHTML = '<option>Không tìm thấy</option>'
         }
@@ -279,6 +281,20 @@ var GeneralManage = {
     },
 }
 var Manager = {
+    Login: (email) => {
+        const url = `https://localhost:7124/api/Account/Login?gmail=${email}`;
+        APIManager.GetAPI(url, onSuccess);
+
+        function onSuccess(response) {
+            if (response.code == "00") {
+                console.log(response.data)
+                const filterList = [...new Set(response.data.sidebars.map(JSON.stringify))].map(JSON.parse);
+                localStorage.setItem('sidebars', JSON.stringify([...new Set(GeneralManage.buildNested(filterList.map((x) => ({ ...x, children: [] }))))]));
+                localStorage.setItem('user', JSON.stringify(response.data));
+                localStorage.setItem('term', JSON.stringify(response.data.currentTerm));
+            }
+        }
+    },
     CurriculumManager: {
         GetAllList: (page, itemsPerPage, filter, resolve) => {
             const url = `https://localhost:7124/api/Curriculum/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
@@ -372,6 +388,14 @@ var Manager = {
         }
     },
     GradeDetailManager: {
+        Export: (courseId,resolve) => {
+            const url = `https://localhost:7124/api/GradeDetail/Export?courseId=${courseId}`;
+            APIManager.GetAPI(url, onSuccess);
+
+            function onSuccess(response) {
+                resolve(response)
+            }
+        },
         GetAllList: (page, itemsPerPage, filter, resolve) => {
             const url = `https://localhost:7124/api/GradeDetail/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
             APIManager.GetAPI(url, onSuccess);
@@ -848,52 +872,6 @@ var Manager = {
 
         Delete: (id, resolve) => {
             const url = `https://localhost:7124/api/Class/Delete/${id}`;
-            APIManager.DeleteAPI(url, onSuccess);
-
-            function onSuccess(response) {
-                resolve(response)
-            }
-        }
-    },
-    ComboManager: {
-        GetAllList: (page, itemsPerPage, filter, resolve) => {
-            const url = `https://localhost:7124/api/Combo/List?$top=${itemsPerPage}&$skip=${page * itemsPerPage}${filter ? "&$filter=" + filter : ""}`;
-            APIManager.GetAPI(url, onSuccess);
-
-            function onSuccess(response) {
-                resolve(response)
-            }
-        },
-
-        Detail: (id, resolve) => {
-            const url = `https://localhost:7124/api/Combo/Detail/${id}`;
-            APIManager.GetAPI(url, onSuccess);
-
-            function onSuccess(response) {
-                resolve(response)
-            }
-        },
-
-        Update: (objectValue, resolve) => {
-            const url = `https://localhost:7124/api/Combo/Update`;
-            APIManager.PostAPI(url, objectValue, onSuccess)
-
-            function onSuccess(response) {
-                resolve(response)
-            }
-        },
-
-        Add: (objectValue, resolve) => {
-            const url = `https://localhost:7124/api/Combo/Add`;
-            APIManager.PostAPI(url, objectValue, onSuccess)
-
-            function onSuccess(response) {
-                resolve(response)
-            }
-        },
-
-        Delete: (id, resolve) => {
-            const url = `https://localhost:7124/api/Combo/Delete/${id}`;
             APIManager.DeleteAPI(url, onSuccess);
 
             function onSuccess(response) {

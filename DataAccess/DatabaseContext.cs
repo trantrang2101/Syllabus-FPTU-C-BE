@@ -20,9 +20,6 @@ namespace DataAccess
         public virtual DbSet<Assessment> Assessments { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Class> Classes { get; set; } = null!;
-        public virtual DbSet<Combo> Combos { get; set; } = null!;
-        public virtual DbSet<ComboCurriculum> ComboCurricula { get; set; } = null!;
-        public virtual DbSet<ComboDetail> ComboDetails { get; set; } = null!;
         public virtual DbSet<Course> Courses { get; set; } = null!;
         public virtual DbSet<Curriculum> Curricula { get; set; } = null!;
         public virtual DbSet<CurriculumDetail> CurriculumDetails { get; set; } = null!;
@@ -160,101 +157,6 @@ namespace DataAccess
                 entity.Property(e => e.Status)
                     .HasColumnName("status")
                     .HasDefaultValueSql("((1))");
-            });
-
-            modelBuilder.Entity<Combo>(entity =>
-            {
-                entity.ToTable("combo");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Code)
-                    .HasMaxLength(255)
-                    .HasColumnName("code");
-
-                entity.Property(e => e.Description).HasColumnName("description");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(255)
-                    .HasColumnName("name");
-
-                entity.Property(e => e.Status)
-                    .HasColumnName("status")
-                    .HasDefaultValueSql("((1))");
-            });
-
-            modelBuilder.Entity<ComboCurriculum>(entity =>
-            {
-                entity.ToTable("combo_curriculum");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Code).HasColumnName("code");
-
-                entity.Property(e => e.Name).HasColumnName("name");
-
-                entity.Property(e => e.Credit).HasColumnName("credit");
-
-                entity.Property(e => e.ComboId).HasColumnName("combo_id");
-
-                entity.Property(e => e.CurriculumId).HasColumnName("curriculum_id");
-
-                entity.Property(e => e.Description).HasColumnName("description");
-
-                entity.Property(e => e.Semester)
-                    .HasColumnName("semester")
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Status)
-                    .HasColumnName("status")
-                    .HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.Combo)
-                    .WithMany(p => p.ComboCurricula)
-                    .HasForeignKey(d => d.ComboId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__combo_cur__combo__2739D489");
-
-                entity.HasOne(d => d.Curriculum)
-                    .WithMany(p => p.ComboCurricula)
-                    .HasForeignKey(d => d.CurriculumId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__combo_cur__curri__282DF8C2");
-            });
-
-            modelBuilder.Entity<ComboDetail>(entity =>
-            {
-                entity.ToTable("combo_detail");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.ComboId).HasColumnName("combo_id");
-
-                entity.Property(e => e.Description).HasColumnName("description");
-
-                entity.Property(e => e.ReplaceSubjectId).HasColumnName("replace_subject_id");
-
-                entity.Property(e => e.Status)
-                    .HasColumnName("status")
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.SubjectId).HasColumnName("subject_id");
-
-                entity.HasOne(d => d.Combo)
-                    .WithMany(p => p.ComboDetails)
-                    .HasForeignKey(d => d.ComboId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__combo_det__combo__29221CFB");
-
-                entity.HasOne(d => d.ReplaceSubject)
-                    .WithMany(p => p.ComboDetailReplaceSubjects)
-                    .HasForeignKey(d => d.ReplaceSubjectId)
-                    .HasConstraintName("FK__combo_det__repla__2A164134");
-
-                entity.HasOne(d => d.Subject)
-                    .WithMany(p => p.ComboDetailSubjects)
-                    .HasForeignKey(d => d.SubjectId)
-                    .HasConstraintName("FK__combo_det__subje__2B0A656D");
             });
 
             modelBuilder.Entity<Course>(entity =>

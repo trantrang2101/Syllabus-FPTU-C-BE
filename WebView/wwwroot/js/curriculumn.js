@@ -17,7 +17,7 @@
             if (resp.code == "00") {
                 if ($('.page-header-subtitle') && $('.page-header-subtitle').length>0) {
                     GeneralManage.setAllFormValue("curriculumDetail", resp.data, false);
-                    GeneralManage.createTable([...resp.data.curriculumDetails, ...resp.data.comboCurricula.map(x => ({ ...x, subject: x.combo }))].sort((a, b) => a.semester - b.semester), ["semester", "subject.code", "subject.name", "credit"], 0, 10000000, "detailList", onSelect);
+                    GeneralManage.createTable([...resp.data.curriculumDetails].sort((a, b) => a.semester - b.semester), ["semester", "subject.code", "subject.name", "credit"], 0, 10000000, "detailList", onSelect);
                     function onSelect(item) {
                         console.log(item)
                         const callDetail = new Promise((resolve, reject) => {
@@ -65,6 +65,32 @@
             if (resp.code == "00") {
                 if ($('.page-header-subtitle') && $('.page-header-subtitle').length > 0) {
                     GeneralManage.setAllFormValue("curriculumDetail", resp.data, false);
+                    const list = resp.data.gradeGenerals.map((x) => ({
+                        ...x,
+                        assessment: {
+                            ...x.assessment,
+                            weight: x.weight,
+                            minMark: x.minMark
+                        },
+                    }))
+                        .map((x) => ({ ...x, category: { ...x.assessment.category } }))
+                        .reduce((a, b) => {
+                            const found = a.find((e) => e.category.id === b.category.id);
+                            return (
+                                found
+                                    ? found.assessment.push({
+                                        ...b.assessment,
+                                    })
+                                    : a.push({
+                                        category: b.category,
+                                        assessment: [
+                                            { ...b.assessment },
+                                        ],
+                                    }),
+                                a
+                            );
+                        }, []);
+                    createMarkTable(list,"detailList")
                 } else {
                     $.ajax({
                         url: '/Curriculum/SetSessionData',
@@ -206,4 +232,40 @@ function onFilter(isManager = false) {
     }
 
     callListAPI(page, itemsPerPage, isManager);
+}
+
+function createMarkTable(list, idName) {
+    const divContainer = document.getElementById(idName);
+    const tBody = divContainer.querySelector(`#${idName} table tbody`);
+    tBody.innerHTML = ""
+    if (list) {
+        list.forEach((item) => {
+            item.assessment.forEach((entity, index) => {
+                tr = tBody.insertRow(-1);
+                if (index === 0) {
+                    console.log(item);
+                    td = document.createElement("td");
+                    td.classList = "fw-bold";
+                    td.setAttribute('rowSpan', item.assessment.length);
+                    td.innerHTML = item.category.name;
+                    tr.appendChild(td);
+                }
+                td = document.createElement("td");
+                td.classList = "fw-semibold";
+                td.innerHTML = entity.name;
+                tr.appendChild(td);
+                td = document.createElement("td");
+                td.innerHTML = entity.weight;
+                td.classList = "text-center";
+                tr.appendChild(td);
+                td = document.createElement("td");
+                td.classList = "text-center";
+                td.innerHTML = entity.minMark;
+                tr.appendChild(td);
+                tBody.appendChild(tr);
+            })
+        });
+    } else {
+        tBody.innerHTML = '<tr><td>Không tìm thấy</td></tr>'
+    }
 }

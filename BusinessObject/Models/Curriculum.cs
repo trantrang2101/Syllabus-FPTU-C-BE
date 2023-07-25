@@ -8,7 +8,6 @@ namespace BusinessObject.Models
     {
         public Curriculum()
         {
-            ComboCurricula = new HashSet<ComboCurriculum>();
             CurriculumDetails = new HashSet<CurriculumDetail>();
             StudentProgresses = new HashSet<StudentProgress>();
         }
@@ -19,7 +18,6 @@ namespace BusinessObject.Models
         public long? MajorId { get; set; }
 
         public virtual Major? Major { get; set; }
-        public virtual ICollection<ComboCurriculum> ComboCurricula { get; set; }
         public virtual ICollection<CurriculumDetail> CurriculumDetails { get; set; }
         public virtual ICollection<StudentProgress> StudentProgresses { get; set; }
     }

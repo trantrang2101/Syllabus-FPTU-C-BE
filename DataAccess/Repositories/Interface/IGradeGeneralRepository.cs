@@ -10,5 +10,6 @@ namespace DataAccess.Repositories.Interface
 {
     public interface IGradeGeneralRepository : IBaseRepository<GradeGeneral, GradeGeneralDTO>
     {
+        
     }
 }

@@ -15,6 +15,20 @@ namespace WebAPI.Controllers
             _repository = repository;
         }
         [HttpGet]
+        [Consumes("text/csv")]
+        [Authorize(Roles = "TEACHER")]
+        public IActionResult Import(List<AccountDTO> list)
+        {
+            try
+            {
+                return Ok(_repository.AddListStudent(list));
+            }
+            catch (Exception ex)
+            {
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
+            }
+        }
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string gmail)
         {

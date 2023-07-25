@@ -21,13 +21,20 @@ namespace WebView.Controllers
         public IActionResult Detail(int id)
         {
             string dataJson = HttpContext.Session.GetString("Detail");
-            if (!string.IsNullOrEmpty(dataJson))
+            try
             {
-                CurriculumDTO value = JsonConvert.DeserializeObject<CurriculumDTO>(dataJson);
-                ViewData["Title"] = value.Code;
-                ViewData["SubTitle"] = value.Name;
-                ViewData["Icon"] = "fa-solid fa-book-bookmark";
-                HttpContext.Session.Remove("Detail");
+                if (!string.IsNullOrEmpty(dataJson))
+                {
+                    CurriculumDTO value = JsonConvert.DeserializeObject<CurriculumDTO>(dataJson);
+                    ViewData["Title"] = value.Code;
+                    ViewData["SubTitle"] = value.Name;
+                    ViewData["Icon"] = "fa-solid fa-book-bookmark";
+                    HttpContext.Session.Remove("Detail");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
             return View();
         }
@@ -36,13 +43,19 @@ namespace WebView.Controllers
         {
             string dataJson = HttpContext.Session.GetString("Subject");
             Console.WriteLine(dataJson);
-            if (!string.IsNullOrEmpty(dataJson))
+            try
             {
-                CurriculumDetailDTO value = JsonConvert.DeserializeObject<CurriculumDetailDTO>(dataJson);
-                ViewData["Title"] = value.Curriculum.Code;
-                ViewData["SubTitle"] = value.Subject.Code+" - "+value.Subject.Name;
-                ViewData["Icon"] = "fa-solid fa-book-bookmark";
-                HttpContext.Session.Remove("Subject");
+                if (!string.IsNullOrEmpty(dataJson))
+                {
+                    CurriculumDetailDTO value = JsonConvert.DeserializeObject<CurriculumDetailDTO>(dataJson);
+                    ViewData["Title"] = value.Curriculum.Code;
+                    ViewData["SubTitle"] = value.Subject.Code + " - " + value.Subject.Name;
+                    ViewData["Icon"] = "fa-solid fa-book-bookmark";
+                    HttpContext.Session.Remove("Subject");
+                }
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
             return View();
         }

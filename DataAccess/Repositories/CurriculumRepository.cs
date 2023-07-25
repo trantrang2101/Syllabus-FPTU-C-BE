@@ -25,7 +25,7 @@ namespace DataAccess.Repositories
 
         public override CurriculumDTO Get(long id)
         {
-            Curriculum basic = table.Include(x => x.Major).Include("ComboCurricula.Combo").Include("CurriculumDetails.Subject").FirstOrDefault(x => x.Id == id);
+            Curriculum basic = table.Include(x => x.Major).Include("CurriculumDetails.Subject").FirstOrDefault(x => x.Id == id);
             return _mapper.Map<CurriculumDTO>(basic);
         }
     }

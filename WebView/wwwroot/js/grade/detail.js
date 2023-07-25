@@ -1,12 +1,15 @@
 ﻿let listStudent, listAssessment, listMatrix, assessments;
 $(document).ready(() => {
+    onLoad();
+});
+function onLoad() {
     const callAPI = new Promise((resolve, reject) => {
         const user = GeneralManage.GetLocalStorage('user'), term = GeneralManage.GetLocalStorage('term');
         Manager.CourseManager.GetAllList(0, 10000000, `Teacher/Id eq ${user.id} and Term/Id eq ${term.id}`, resolve);
     });
     callAPI.then((response) => {
         if (response && response.code == "00") {
-            const listCourse = response.data.content.map(x => ({ ...x, classCode: x.class.code + " - " + x.subject.code }));
+            const listCourse = response.data.content.map(x => ({ ...x, classCode: x.class.code + "_" + x.subject.code }));
             GeneralManage.createSelect(listCourse, "id", "classCode", "listCourse");
             $('#listCourse').on('change', () => {
                 onChange();
@@ -19,8 +22,7 @@ $(document).ready(() => {
             })
         }
     });
-
-});
+}
 function createListAssessment(idName) {
     const divContainer = document.getElementById(idName);
     divContainer.innerHTML = "";
@@ -259,7 +261,30 @@ function onSave() {
             mark: parseFloat(x.mark),
             status: x.status,
         }));
-        console.log(value);
+        const callAPI = new Promise((resolve, reject) => {
+            Manager.GradeDetailManager.UpdateAll(value, resolve);
+        });
+        callAPI.then((response) => {
+            if (response && response.code == "00") {
+                onLoad();
+            }
+        });
     }
-    console.log(changeArray);
+}
+function onExport() {
+    const callAPI = new Promise((resolve, reject) => {
+        Manager.GradeDetailManager.Export($('#listCourse').val(), resolve);
+    });
+    callAPI.then((response) => {
+        $('#listCourse option').forEach(() => {
+            console.log($(this));
+        })
+        let data = `data:text/csv;charset=utf-8,${response}`;
+        const encodedUri = encodeURI(data);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "my_data.csv");
+        document.body.appendChild(link);
+        link.click();
+    });
 }

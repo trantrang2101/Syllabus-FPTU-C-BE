@@ -22,5 +22,19 @@ namespace DataAccess.Repositories
             List<StudentCourse> products = _context.StudentCourses.Include(x=>x.Student).Include("Course.Term").Include("Course.Class").Include("Course.Subject").ToList();
             return _mapper.Map<List<StudentCourseDTO>>(products);
         }
+
+        public override StudentCourseDTO Add(StudentCourseDTO dto)
+        {
+            if (dto == null)
+            {
+                throw new Exception("Chưa truyền giá trị vào");
+            }
+            StudentCourse basic = _mapper.Map<StudentCourse>(dto);
+            //List<GradeGeneral> list = _context.GradeGenerals.Where(x=>x.)
+            SetObjectsToNull(basic);
+            StudentCourse saveBasic = table.Add(basic).Entity;
+            _context.SaveChanges();
+            return Get(saveBasic.Id);
+        }
     }
 }

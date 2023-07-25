@@ -14,6 +14,5 @@ namespace DataAccess.DTO
 
         public virtual AssessmentDTO? Assessment { get; set; }
         public virtual CurriculumDetailDTO? CurriculumDetail { get; set; }
-        public virtual ICollection<GradeDetailDTO> GradeDetails { get; set; } = new HashSet<GradeDetailDTO>();
     }
 }

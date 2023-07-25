@@ -18,6 +18,17 @@ namespace DataAccess.Repositories
         {
         }
 
+        public IEnumerable<GradeDetailDTO> ExportExcel(int courseId)
+        {
+            List<GradeDetail> products = _context.GradeDetails.Include("StudentCourse.Course").Include("StudentCourse.Student").Include("GradeGeneral.Assessment.Category").Where(x=>x.StudentCourse.CourseId==courseId).ToList();
+            List<GradeDetailDTO> dto = new List<GradeDetailDTO>() { };
+            if (products != null && products.Count() > 0)
+            {
+                return _mapper.Map<List<GradeDetailDTO>>(products);
+            }
+            return dto;
+        }
+
         public override List<GradeDetailDTO> GetAll()
         {
             List<GradeDetail> products = _context.GradeDetails.Include("StudentCourse.Course").Include("StudentCourse.Student").Include("GradeGeneral.Assessment.Category").ToList();

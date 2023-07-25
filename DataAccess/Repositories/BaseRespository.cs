@@ -3,6 +3,7 @@ using AutoMapper.Execution;
 using BusinessObject.Models;
 using DataAccess.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using System.Reflection;
 
 namespace DataAccess.Repositories
@@ -29,8 +30,10 @@ namespace DataAccess.Repositories
 
             foreach (PropertyInfo property in properties)
             {
-                if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
+                if (property.PropertyType.IsClass && property.PropertyType != typeof(string)
+                        && property.PropertyType.GetInterface(nameof(IEnumerable)) != null)
                 {
+                    Console.WriteLine(property.Name);
                     // Set properties of class types to null
                     object value = property.GetValue(obj);
                     SetObjectsToNull(value);
@@ -61,7 +64,11 @@ namespace DataAccess.Repositories
             }
             basic.Status = 0;
             table.Update(basic);
-            return _context.SaveChanges() > 0;
+            if(_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            throw new Exception("Không xóa được");
         }
 
         public virtual D Get(long id)
@@ -83,9 +90,9 @@ namespace DataAccess.Repositories
                 throw new Exception("Chưa truyền giá trị vào");
             }
             B basic = table.FirstOrDefault(x => x.Id == dto.Id);
-            if (basic == null || basic.Status == 0)
+            if (basic == null)
             {
-                throw new Exception("Không tìm thấy hoặc đã bị xóa");
+                throw new Exception("Không tìm thấy");
             }
             basic = _mapper.Map<B>(dto);
             SetObjectsToNull(basic);

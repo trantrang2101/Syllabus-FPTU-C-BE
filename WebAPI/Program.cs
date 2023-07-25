@@ -9,8 +9,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using WebAPI.Formatter;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers(options => {
+    options.OutputFormatters.Add(new CsvOutputFormatter());
+    options.InputFormatters.Add(new CsvInputFormatter());
+});
+
 var configuration = builder.Configuration;
 string connectionString = configuration.GetConnectionString("Database");
 builder.Services.AddDbContext<DatabaseContext>(options =>
@@ -56,7 +62,6 @@ builder.Services.AddScoped<IAssessmentRepository, AssessmentRepository>();
 builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
-builder.Services.AddScoped<IComboRepository, ComboRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ICurriculumDetailRepository, CurriculumDetailRepository>();
 builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>();

@@ -52,11 +52,6 @@ namespace WebView.Controllers
             return View();
         }
 
-        public IActionResult Combo()
-        {
-            return View();
-        }
-
         public IActionResult Course()
         {
             return View();

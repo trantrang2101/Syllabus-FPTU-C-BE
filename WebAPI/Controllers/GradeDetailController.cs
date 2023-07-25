@@ -30,5 +30,19 @@ namespace WebAPI.Controllers
                 return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
             }
         }
+        [HttpGet]
+        [Produces("text/csv")]
+        [Authorize(Roles = "TEACHER")]
+        public IActionResult Export(int courseId)
+        {
+            try
+            {
+                return Ok(_repository.ExportExcel(courseId));
+            }
+            catch (Exception ex)
+            {
+                return Ok(new BaseResponse<string>().errWithData(ex.Message).ToJson());
+            }
+        }
     }
 }
