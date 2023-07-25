@@ -30,9 +30,19 @@ namespace DataAccess.Repositories
                 throw new Exception("Chưa truyền giá trị vào");
             }
             StudentCourse basic = _mapper.Map<StudentCourse>(dto);
-            //List<GradeGeneral> list = _context.GradeGenerals.Where(x=>x.)
             SetObjectsToNull(basic);
             StudentCourse saveBasic = table.Add(basic).Entity;
+            _context.SaveChanges();
+            StudentCourseDTO studentCourse = Get(saveBasic.Id);
+            List<GradeGeneral> list = _context.GradeGenerals.Where(x => x.CurriculumDetail.Subject.Id == studentCourse.Course.Subject.Id).ToList();
+            foreach (var item in list)
+            {
+                _context.GradeDetails.Add(new GradeDetail()
+                {
+                    StudentCourseId=studentCourse.Id,
+                    GradeGeneralId = item.Id,
+                }); 
+            }
             _context.SaveChanges();
             return Get(saveBasic.Id);
         }

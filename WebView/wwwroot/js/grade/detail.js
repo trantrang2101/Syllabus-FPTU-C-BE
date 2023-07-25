@@ -276,15 +276,17 @@ function onExport() {
         Manager.GradeDetailManager.Export($('#listCourse').val(), resolve);
     });
     callAPI.then((response) => {
-        $('#listCourse option').forEach(() => {
-            console.log($(this));
+        document.querySelectorAll('#listCourse option').forEach((x) => {
+            if ($('#listCourse').val() === x.value) {
+                let data = `data:text/csv;charset=utf-8,${response}`;
+                const encodedUri = encodeURI(data);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", x.innerHTML+".csv");
+                document.body.appendChild(link);
+                link.click();
+                return;
+            }
         })
-        let data = `data:text/csv;charset=utf-8,${response}`;
-        const encodedUri = encodeURI(data);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "my_data.csv");
-        document.body.appendChild(link);
-        link.click();
     });
 }

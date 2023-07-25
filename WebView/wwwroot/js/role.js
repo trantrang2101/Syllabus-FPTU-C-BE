@@ -1,4 +1,5 @@
 ﻿$(document).ready(() => {
+    GeneralManage.createEditor('description');
     if (window.location.href.toLowerCase().includes("manager/role")) {
         onFilter(true);
     }
@@ -27,12 +28,12 @@ function callListAPI(page, itemsPerPage, isManager) {
             }
 
             function onSelect(item) {
-                if ($('tbody tr.table-primary')) {
-                    $("tbody tr.table-primary").removeClass("table-primary");
+                if ($('#tableList tbody tr.table-primary')) {
+                    $("#tableList tbody tr.table-primary").removeClass("table-primary");
                 }
-                if ($(`.row-${item.id}`)) {
+                if ($(`#tableList .row-${item.id}`)) {
                     console.log($(`.row-${item.id}`))
-                    $(`.row-${item.id}`).addClass('table-primary');
+                    $(`#tableList .row-${item.id}`).addClass('table-primary');
                 }
                 $('#btnDelete').prop('disabled', false);
                 GeneralManage.setAllFormValue("formData", item);
@@ -43,7 +44,6 @@ function callListAPI(page, itemsPerPage, isManager) {
 function onFilter(isManager = false) {
     var page = 0, itemsPerPage = 20;
     if (isManager) {
-        GeneralManage.createEditor('description');
         $('#btnDelete').prop('disabled', true);
         $('#btnDelete').click(function (e) {
             const old_element = document.getElementById("btnDelete");
@@ -91,7 +91,8 @@ function onFilter(isManager = false) {
         });
         callSidebar.then((response) => {
             if (response && response.code == "00") {
-                GeneralManage.createTable(response.data.content, ["code", "name"], page, itemsPerPage, "tableList", null);
+                GeneralManage.createTable(response.data.content, ["*", "icon", "name", "url"], 0, 1000000, "sidebarList", null, [`<input type='checkbox' name='sidebars' data-value='[0]'>`, `<i class="[0]"></i>`], false);
+                $('#btnAdd').click();
             }
         });
         GeneralManage.createSelect([{ id: 1, name: "Kích hoạt" }, { id: 0, name: "Đóng" }], "id", "name", "status");

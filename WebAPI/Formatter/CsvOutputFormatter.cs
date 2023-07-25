@@ -33,7 +33,7 @@ namespace WebAPI.Formatter
             var stringBuilder = new StringBuilder();
             if (context.Object is IEnumerable<GradeDetailDTO> listGrade)
             {
-                List<String> title = new List<string>() { "Student Name", "Student Email","Student Code" };
+                List<String> title = new List<string>() { "Student Email","Student Code" };
                 List<GradeGeneralDTO> gradeGenerals = listGrade.Select(x => x.GradeGeneral).ToList();
                 List<AccountDTO> students = listGrade.GroupBy(x => x.StudentCourse.Student.Id).Select(grp => grp.First()).Select(x=>x.StudentCourse.Student).ToList();
                 if(gradeGenerals.Any())
@@ -61,7 +61,6 @@ namespace WebAPI.Formatter
         }
         private void FormatCSV(StringBuilder buffer, List<GradeDetailDTO> list, AccountDTO acc)
         {
-            buffer.Append($"{acc.Name},");
             buffer.Append($"{acc.Email},");
             buffer.Append($"{acc.Code},");
             foreach (var item in list)

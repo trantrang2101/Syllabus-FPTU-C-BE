@@ -1,4 +1,5 @@
-﻿$(document).ready(() => {
+﻿let listSubject;
+$(document).ready(() => {
     if (window.location.href.toLowerCase().includes("manager/curriculum")) {
         onFilter(true);
     }else if (window.location.href.toLowerCase().includes("curriculum/list")) {
@@ -148,6 +149,8 @@ function callListAPI(page, itemsPerPage, isManager) {
                         if (isManager) {
                             $('#btnDelete').prop('disabled', false);
                             GeneralManage.setAllFormValue("formData", resp.data);
+                            const data = 
+                            GeneralManage.createTable(listSubject, ["*", "code", "name", "credit", "minMark", "semester"], 0, 1000000, "detailList", null, [`<input type='checkbox' name='curriculumDetails' data-value='[0]'>`, '', '', '<input type="number" name="curriculumDetails.credit" class="form-control" value="[0]"/>', '<input type="number" name="curriculumDetails.minMark" class="form-control" value="[0]"/>', '<input type="number" name="curriculumDetails.semester" class="form-control" value="[0]"/>'], false);
                         } else {
                             $.ajax({
                                 url: '/Curriculum/SetSessionData',
@@ -226,6 +229,16 @@ function onFilter(isManager = false) {
         callMajor.then((response) => {
             if (response && response.code == "00") {
                 GeneralManage.createSelect(response.data.content, "id", "name", "major");
+            }
+        });
+        const callSubject = new Promise((resolve, reject) => {
+            Manager.SubjectManager.GetAllList(0, 1000000, "status ne 0", resolve)
+        });
+        callSubject.then((response) => {
+            if (response && response.code == "00") {
+                listSubject = response.data.content.map(x => ({...x,credit: null,minMark: null,semester: null}))
+                GeneralManage.createTable(listSubject, ["*", "code", "name", "credit", "minMark", "semester"], 0, 1000000, "detailList", null, [`<input type='checkbox' name='curriculumDetails' data-value='[0]'>`, '', '', '<input type="number" name="curriculumDetails.credit" class="form-control" value="[0]"/>', '<input type="number" name="curriculumDetails.minMark" class="form-control" value="[0]"/>', '<input type="number" name="curriculumDetails.semester" class="form-control" value="[0]"/>'], false);
+                $('#btnAdd').click();
             }
         });
         GeneralManage.createSelect([{ id: 1, name: "Kích hoạt" }, { id: 0, name: "Đóng" }], "id", "name", "status");

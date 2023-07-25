@@ -124,7 +124,7 @@ var GeneralManage = {
             }
         });
         if (isSetHeight) {
-            $('#' + formId).height($(window).height() - 410);
+            $('#' + formId).height($(window).height() - 350);
         }
     },
     getAllFormValue: (formId) => {
@@ -251,7 +251,7 @@ var GeneralManage = {
         } else {
             tBody.innerHTML = '<tr><td>Không tìm thấy</td></tr>'
         }
-        $('#' + idName + ' .table-responsive').height($(window).height() - 350);
+        $('#' + idName + ' .table-responsive').height($(window).height() - 275);
     },
     createPaginationItem: (content, parent, onClickItem, page = null) => {
         const li = document.createElement('li');
