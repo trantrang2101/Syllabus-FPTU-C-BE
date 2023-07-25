@@ -12,5 +12,7 @@ namespace DataAccess.DTO
         public string? Url { get; set; }
 
         public virtual SidebarDTO? Parent { get; set; }
+
+        public virtual ICollection<RoleSidebar> RoleSidebars { get; set; } = new List<RoleSidebar>();
     }
 }

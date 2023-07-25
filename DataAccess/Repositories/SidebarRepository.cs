@@ -19,14 +19,14 @@ namespace DataAccess.Repositories
 
         public override SidebarDTO Get(long id)
         {
-            var sidebar = _context.Sidebars.Include(s => s.Parent).FirstOrDefault(s => s.Id == id);
+            var sidebar = _context.Sidebars.Include(s => s.Parent).Include(sidebar => sidebar.RoleSidebars).ThenInclude(sidebar => sidebar.Role).FirstOrDefault(s => s.Id == id);
             return _mapper.Map<SidebarDTO>(sidebar);
 
         }
 
         public override List<SidebarDTO> GetAll()
         {
-            var sidebars = _context.Sidebars.Include(s => s.Parent).ToList();
+            var sidebars = _context.Sidebars.Include(s => s.Parent).Include(sidebar => sidebar.RoleSidebars).ThenInclude(sidebar => sidebar.Role).ToList();
             return _mapper.Map<List<SidebarDTO>>(sidebars);
         }
     }
